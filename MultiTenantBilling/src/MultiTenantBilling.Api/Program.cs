@@ -1,8 +1,15 @@
+using MultiTenantBilling.Api.Middleware;
+using MultiTenantBilling.Api.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// Register tenant services
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ITenantService, TenantService>();
 
 var app = builder.Build();
 
@@ -13,6 +20,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Register tenant middleware
+app.UseMiddleware<TenantMiddleware>();
 
 var summaries = new[]
 {

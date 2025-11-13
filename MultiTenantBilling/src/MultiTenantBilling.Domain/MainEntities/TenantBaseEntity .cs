@@ -1,13 +1,10 @@
-﻿using MultiTenantBilling.Domain.Interface;
+﻿using MultiTenantBilling.Domain.Common;
+using MultiTenantBilling.Domain.Interface;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MultiTenantBilling.Domain.MainEntities
 {
-    internal class TenantBaseEntity : BaseEntities , ITenantEntity, ISoftDeletable
+    internal class TenantBaseEntity : BaseEntity, ITenantEntity, ISoftDeletable
     {
         public Guid TenantId { get; set; }
         public bool IsDeleted { get; set; }

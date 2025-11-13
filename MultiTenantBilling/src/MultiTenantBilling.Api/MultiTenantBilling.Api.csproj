@@ -15,4 +15,12 @@
     <ProjectReference Include="..\MultiTenantBilling.Infrastructure\MultiTenantBilling.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Attributes\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Middleware\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>
