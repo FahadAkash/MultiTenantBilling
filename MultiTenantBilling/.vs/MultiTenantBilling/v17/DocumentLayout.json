@@ -1,0 +1,105 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5AC21C06-B4E1-494C-B9E5-40E7E046D9CF}|src\\MultiTenantBilling.Domain\\MultiTenantBilling.Domain.csproj|f:\\gihtub\\multitenantbilling\\multitenantbilling\\src\\multitenantbilling.domain\\interface\\isoftdeletable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5AC21C06-B4E1-494C-B9E5-40E7E046D9CF}|src\\MultiTenantBilling.Domain\\MultiTenantBilling.Domain.csproj|solutionrelative:src\\multitenantbilling.domain\\interface\\isoftdeletable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5AC21C06-B4E1-494C-B9E5-40E7E046D9CF}|src\\MultiTenantBilling.Domain\\MultiTenantBilling.Domain.csproj|f:\\gihtub\\multitenantbilling\\multitenantbilling\\src\\multitenantbilling.domain\\interface\\itenantentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5AC21C06-B4E1-494C-B9E5-40E7E046D9CF}|src\\MultiTenantBilling.Domain\\MultiTenantBilling.Domain.csproj|solutionrelative:src\\multitenantbilling.domain\\interface\\itenantentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5AC21C06-B4E1-494C-B9E5-40E7E046D9CF}|src\\MultiTenantBilling.Domain\\MultiTenantBilling.Domain.csproj|f:\\gihtub\\multitenantbilling\\multitenantbilling\\src\\multitenantbilling.domain\\mainentities\\tenantbaseentity .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5AC21C06-B4E1-494C-B9E5-40E7E046D9CF}|src\\MultiTenantBilling.Domain\\MultiTenantBilling.Domain.csproj|solutionrelative:src\\multitenantbilling.domain\\mainentities\\tenantbaseentity .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5AC21C06-B4E1-494C-B9E5-40E7E046D9CF}|src\\MultiTenantBilling.Domain\\MultiTenantBilling.Domain.csproj|f:\\gihtub\\multitenantbilling\\multitenantbilling\\src\\multitenantbilling.domain\\mainentities\\baseentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5AC21C06-B4E1-494C-B9E5-40E7E046D9CF}|src\\MultiTenantBilling.Domain\\MultiTenantBilling.Domain.csproj|solutionrelative:src\\multitenantbilling.domain\\mainentities\\baseentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80CEB895-1E91-49E3-8943-6085C0550CA1}|src\\MultiTenantBilling.Api\\MultiTenantBilling.Api.csproj|f:\\gihtub\\multitenantbilling\\multitenantbilling\\src\\multitenantbilling.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80CEB895-1E91-49E3-8943-6085C0550CA1}|src\\MultiTenantBilling.Api\\MultiTenantBilling.Api.csproj|solutionrelative:src\\multitenantbilling.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TenantBaseEntity .cs",
+              "DocumentMoniker": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Domain\\MainEntities\\TenantBaseEntity .cs",
+              "RelativeDocumentMoniker": "src\\MultiTenantBilling.Domain\\MainEntities\\TenantBaseEntity .cs",
+              "ToolTip": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Domain\\MainEntities\\TenantBaseEntity .cs",
+              "RelativeToolTip": "src\\MultiTenantBilling.Domain\\MainEntities\\TenantBaseEntity .cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T15:46:30.368Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ISoftDeletable.cs",
+              "DocumentMoniker": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Domain\\Interface\\ISoftDeletable.cs",
+              "RelativeDocumentMoniker": "src\\MultiTenantBilling.Domain\\Interface\\ISoftDeletable.cs",
+              "ToolTip": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Domain\\Interface\\ISoftDeletable.cs",
+              "RelativeToolTip": "src\\MultiTenantBilling.Domain\\Interface\\ISoftDeletable.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T15:46:09.918Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ITenantEntity.cs",
+              "DocumentMoniker": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Domain\\Interface\\ITenantEntity.cs",
+              "RelativeDocumentMoniker": "src\\MultiTenantBilling.Domain\\Interface\\ITenantEntity.cs",
+              "ToolTip": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Domain\\Interface\\ITenantEntity.cs",
+              "RelativeToolTip": "src\\MultiTenantBilling.Domain\\Interface\\ITenantEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T15:45:55.385Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BaseEntities.cs",
+              "DocumentMoniker": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Domain\\MainEntities\\BaseEntities.cs",
+              "RelativeDocumentMoniker": "src\\MultiTenantBilling.Domain\\MainEntities\\BaseEntities.cs",
+              "ToolTip": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Domain\\MainEntities\\BaseEntities.cs",
+              "RelativeToolTip": "src\\MultiTenantBilling.Domain\\MainEntities\\BaseEntities.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T15:43:45.488Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\Program.cs",
+              "RelativeDocumentMoniker": "src\\MultiTenantBilling.Api\\Program.cs",
+              "ToolTip": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\Program.cs",
+              "RelativeToolTip": "src\\MultiTenantBilling.Api\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T15:30:05.184Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

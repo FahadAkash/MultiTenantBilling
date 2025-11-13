@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "kW6kPnkUpcZKY6U9hMV+gaxPYaqID21Ja6wsKVDqnNk=",
+  "Source": "MultiTenantBilling.Api",
+  "BasePath": "_content/MultiTenantBilling.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

@@ -1,0 +1,6 @@
+@MultiTenantBilling.Api_HostAddress = http://localhost:5168
+
+GET {{MultiTenantBilling.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

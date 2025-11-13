@@ -1,0 +1,125 @@
+{
+  "version": 3,
+  "targets": {
+    "net9.0": {
+      "MultiTenantBilling.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "MultiTenantBilling.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/MultiTenantBilling.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MultiTenantBilling.Application.dll": {}
+        }
+      },
+      "MultiTenantBilling.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/MultiTenantBilling.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MultiTenantBilling.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MultiTenantBilling.Application/1.0.0": {
+      "type": "project",
+      "path": "../MultiTenantBilling.Application/MultiTenantBilling.Application.csproj",
+      "msbuildProject": "../MultiTenantBilling.Application/MultiTenantBilling.Application.csproj"
+    },
+    "MultiTenantBilling.Domain/1.0.0": {
+      "type": "project",
+      "path": "../MultiTenantBilling.Domain/MultiTenantBilling.Domain.csproj",
+      "msbuildProject": "../MultiTenantBilling.Domain/MultiTenantBilling.Domain.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net9.0": [
+      "MultiTenantBilling.Application >= 1.0.0",
+      "MultiTenantBilling.Domain >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\fahad\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Infrastructure\\MultiTenantBilling.Infrastructure.csproj",
+      "projectName": "MultiTenantBilling.Infrastructure",
+      "projectPath": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Infrastructure\\MultiTenantBilling.Infrastructure.csproj",
+      "packagesPath": "C:\\Users\\fahad\\.nuget\\packages\\",
+      "outputPath": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Infrastructure\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\fahad\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net9.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "projectReferences": {
+            "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Application\\MultiTenantBilling.Application.csproj": {
+              "projectPath": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Application\\MultiTenantBilling.Application.csproj"
+            },
+            "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Domain\\MultiTenantBilling.Domain.csproj": {
+              "projectPath": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Domain\\MultiTenantBilling.Domain.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.100"
+    },
+    "frameworks": {
+      "net9.0": {
+        "targetAlias": "net9.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

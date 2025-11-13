@@ -1,0 +1,12 @@
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Domain\bin\Debug\net9.0\MultiTenantBilling.Domain.deps.json
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Domain\bin\Debug\net9.0\MultiTenantBilling.Domain.dll
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Domain\bin\Debug\net9.0\MultiTenantBilling.Domain.pdb
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Domain\obj\Debug\net9.0\MultiTenantBilling.Domain.GeneratedMSBuildEditorConfig.editorconfig
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Domain\obj\Debug\net9.0\MultiTenantBilling.Domain.AssemblyInfoInputs.cache
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Domain\obj\Debug\net9.0\MultiTenantBilling.Domain.AssemblyInfo.cs
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Domain\obj\Debug\net9.0\MultiTenantBilling.Domain.csproj.CoreCompileInputs.cache
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Domain\obj\Debug\net9.0\MultiTenantBilling.Domain.sourcelink.json
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Domain\obj\Debug\net9.0\MultiTenantBilling.Domain.dll
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Domain\obj\Debug\net9.0\refint\MultiTenantBilling.Domain.dll
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Domain\obj\Debug\net9.0\MultiTenantBilling.Domain.pdb
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Domain\obj\Debug\net9.0\ref\MultiTenantBilling.Domain.dll
