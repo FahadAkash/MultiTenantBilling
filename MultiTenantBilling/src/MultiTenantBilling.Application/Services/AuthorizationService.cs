@@ -12,17 +12,20 @@ namespace MultiTenantBilling.Application.Services
         private readonly ITenantRepository<User> _userRepository;
         private readonly ITenantRepository<Role> _roleRepository;
         private readonly ITenantRepository<UserRole> _userRoleRepository;
+        private readonly ITenantService _tenantService; // Use ITenantService from Application layer
         private readonly ILogger<AuthorizationService> _logger;
 
         public AuthorizationService(
             ITenantRepository<User> userRepository,
             ITenantRepository<Role> roleRepository,
             ITenantRepository<UserRole> userRoleRepository,
+            ITenantService tenantService, // Use ITenantService from Application layer
             ILogger<AuthorizationService> logger)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _userRoleRepository = userRoleRepository;
+            _tenantService = tenantService;
             _logger = logger;
         }
 
@@ -152,6 +155,7 @@ namespace MultiTenantBilling.Application.Services
                 return new User
                 {
                     Id = Guid.NewGuid(),
+                    TenantId = _tenantService.GetRequiredTenantId(),
                     Email = email,
                     FirstName = "Admin",
                     LastName = "User",
@@ -169,6 +173,7 @@ namespace MultiTenantBilling.Application.Services
             return new Role
             {
                 Id = Guid.NewGuid(),
+                TenantId = _tenantService.GetRequiredTenantId(),
                 Name = roleName,
                 Description = $"{roleName} role"
             };

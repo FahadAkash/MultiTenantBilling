@@ -12,7 +12,7 @@ namespace MultiTenantBilling.Application.Services
         private readonly ITenantRepository<User> _userRepository;
         private readonly ITenantRepository<Role> _roleRepository;
         private readonly ITenantRepository<UserRole> _userRoleRepository;
-        private readonly ITenantService _tenantService;
+        private readonly ITenantService _tenantService; // Use ITenantService from Application layer
         private readonly JwtService _jwtService;
         private readonly ILogger<AuthService> _logger;
 
@@ -20,7 +20,7 @@ namespace MultiTenantBilling.Application.Services
             ITenantRepository<User> userRepository,
             ITenantRepository<Role> roleRepository,
             ITenantRepository<UserRole> userRoleRepository,
-            ITenantService tenantService,
+            ITenantService tenantService, // Use ITenantService from Application layer
             JwtService jwtService,
             ILogger<AuthService> logger)
         {

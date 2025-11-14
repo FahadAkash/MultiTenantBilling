@@ -1,12 +1,11 @@
+using MultiTenantBilling.Application.Services; // Add this using statement
 using System;
 
 namespace MultiTenantBilling.Api.Services
 {
-    public interface IApiTenantService
+    public interface IApiTenantService : ITenantService // Inherit from ITenantService
     {
-        Guid? GetTenantId();
-        void SetTenantId(Guid tenantId);
-        bool IsTenantAvailable();
-        Guid GetRequiredTenantId();
+        // The interface now inherits all members from ITenantService
+        // We can add any API-specific members here if needed
     }
 }

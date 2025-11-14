@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{80CEB895-1E91-49E3-8943-6085C0550CA1}|src\\MultiTenantBilling.Api\\MultiTenantBilling.Api.csproj|f:\\gihtub\\multitenantbilling\\multitenantbilling\\src\\multitenantbilling.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{80CEB895-1E91-49E3-8943-6085C0550CA1}|src\\MultiTenantBilling.Api\\MultiTenantBilling.Api.csproj|solutionrelative:src\\multitenantbilling.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{80CEB895-1E91-49E3-8943-6085C0550CA1}|src\\MultiTenantBilling.Api\\MultiTenantBilling.Api.csproj|f:\\gihtub\\multitenantbilling\\multitenantbilling\\src\\multitenantbilling.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{80CEB895-1E91-49E3-8943-6085C0550CA1}|src\\MultiTenantBilling.Api\\MultiTenantBilling.Api.csproj|solutionrelative:src\\multitenantbilling.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80CEB895-1E91-49E3-8943-6085C0550CA1}|src\\MultiTenantBilling.Api\\MultiTenantBilling.Api.csproj|f:\\gihtub\\multitenantbilling\\multitenantbilling\\src\\multitenantbilling.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{80CEB895-1E91-49E3-8943-6085C0550CA1}|src\\MultiTenantBilling.Api\\MultiTenantBilling.Api.csproj|solutionrelative:src\\multitenantbilling.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{80CEB895-1E91-49E3-8943-6085C0550CA1}|src\\MultiTenantBilling.Api\\MultiTenantBilling.Api.csproj|f:\\gihtub\\multitenantbilling\\multitenantbilling\\src\\multitenantbilling.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -90,21 +90,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 2,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "src\\MultiTenantBilling.Api\\Controllers\\AuthController.cs",
-              "ToolTip": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "src\\MultiTenantBilling.Api\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-14T03:59:56.537Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 11,
@@ -115,8 +102,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Worker\\MultiTenantBilling.Worker.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-11-13T16:54:40.346Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T16:54:40.346Z"
             },
             {
               "$type": "Document",
@@ -128,18 +114,17 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Api\\Middleware\\TenantMiddleware.cs",
               "ViewState": "AgIAACEAAAAAAAAAAAAowBkAAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-13T16:53:48.07Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T16:53:48.07Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\Program.cs",
               "RelativeDocumentMoniker": "src\\MultiTenantBilling.Api\\Program.cs",
               "ToolTip": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\Program.cs",
               "RelativeToolTip": "src\\MultiTenantBilling.Api\\Program.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAkwEoAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAIsAAAAAAAAAAAD4v3kAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-13T15:30:05.184Z",
               "EditorCaption": ""
@@ -154,8 +139,31 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Infrastructure\\Data\\ApplicationDbContext.cs",
               "ViewState": "AgIAACsAAAAAAAAAAAAUwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-14T03:11:26.107Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-14T03:11:26.107Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\appsettings.json",
+              "RelativeDocumentMoniker": "src\\MultiTenantBilling.Api\\appsettings.json",
+              "ToolTip": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\appsettings.json",
+              "RelativeToolTip": "src\\MultiTenantBilling.Api\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-14T03:18:07.093Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "src\\MultiTenantBilling.Api\\Controllers\\AuthController.cs",
+              "ToolTip": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "src\\MultiTenantBilling.Api\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-14T03:59:56.537Z"
             },
             {
               "$type": "Document",
@@ -167,8 +175,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Application\\DTOs\\RoleAssignmentDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-14T03:16:12.032Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-14T03:16:12.032Z"
             },
             {
               "$type": "Document",
@@ -180,21 +187,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Application\\DTOs\\RegisterDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-14T03:16:15.906Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\appsettings.json",
-              "RelativeDocumentMoniker": "src\\MultiTenantBilling.Api\\appsettings.json",
-              "ToolTip": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\appsettings.json",
-              "RelativeToolTip": "src\\MultiTenantBilling.Api\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-11-14T03:18:07.093Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-14T03:16:15.906Z"
             },
             {
               "$type": "Document",
@@ -206,8 +199,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Api\\Controllers\\UserController.cs",
               "ViewState": "AgIAADUAAAAAAAAAAAAwwFQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-14T03:13:26.999Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-14T03:13:26.999Z"
             },
             {
               "$type": "Document",
@@ -219,8 +211,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Domain\\Entities\\TenantUser.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-13T16:57:47.149Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T16:57:47.149Z"
             },
             {
               "$type": "Document",
@@ -232,8 +223,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Application\\Services\\AuthService.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-14T03:11:38.948Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-14T03:11:38.948Z"
             },
             {
               "$type": "Document",
@@ -245,8 +235,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Api\\Services\\ITenantService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-13T16:53:53.509Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T16:53:53.509Z"
             },
             {
               "$type": "Document",
@@ -258,8 +247,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Api\\Extensions\\HttpContextExtensions.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-13T16:53:43.404Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T16:53:43.404Z"
             },
             {
               "$type": "Document",
@@ -271,8 +259,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Api\\Controllers\\TenantTestController.cs",
               "ViewState": "AgIAAAQAAAAAAAAAAEBVwCkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-13T16:52:43.141Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T16:52:43.141Z"
             },
             {
               "$type": "Document",
@@ -284,8 +271,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Api\\Services\\TenantService.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-13T16:53:56.404Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T16:53:56.404Z"
             },
             {
               "$type": "Document",
@@ -297,8 +283,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Domain\\MainEntities\\TenantBaseEntity .cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-13T15:46:30.368Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T15:46:30.368Z"
             },
             {
               "$type": "Document",
@@ -310,8 +295,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Domain\\Interface\\ISoftDeletable.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-13T15:46:09.918Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T15:46:09.918Z"
             },
             {
               "$type": "Document",
@@ -323,8 +307,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Api\\Attributes\\RequireTenantAttribute.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-13T16:52:47.295Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T16:52:47.295Z"
             },
             {
               "$type": "Document",
@@ -336,8 +319,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Domain\\Interface\\ITenantEntity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-13T15:45:55.385Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T15:45:55.385Z"
             },
             {
               "$type": "Document",
@@ -349,8 +331,7 @@
               "RelativeToolTip": "src\\MultiTenantBilling.Domain\\MainEntities\\BaseEntities.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-13T15:43:45.488Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-13T15:43:45.488Z"
             }
           ]
         }

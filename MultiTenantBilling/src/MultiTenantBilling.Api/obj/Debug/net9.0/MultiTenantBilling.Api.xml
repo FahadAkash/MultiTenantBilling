@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MultiTenantBilling.Api</name>
+    </assembly>
+    <members>
+        <member name="T:MultiTenantBilling.Api.Controllers.AuthController">
+            <summary>
+            Authentication controller for user registration, login, and password management.
+            </summary>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AuthController.#ctor(MultiTenantBilling.Application.Services.IAuthService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MultiTenantBilling.Api.Controllers.AuthController"/> class.
+            </summary>
+            <param name="authService">The authentication service.</param>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AuthController.Register(MultiTenantBilling.Application.DTOs.RegisterDto)">
+            <summary>
+            Registers a new user with the provided details.
+            </summary>
+            <param name="registerDto">The registration details.</param>
+            <returns>An authentication response with a JWT token.</returns>
+            <response code="200">Returns the authentication response.</response>
+            <response code="400">If the user already exists or validation fails.</response>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AuthController.Login(MultiTenantBilling.Application.DTOs.LoginDto)">
+            <summary>
+            Authenticates a user and returns a JWT token.
+            </summary>
+            <param name="loginDto">The login credentials.</param>
+            <returns>An authentication response with a JWT token.</returns>
+            <response code="200">Returns the authentication response.</response>
+            <response code="401">If the credentials are invalid.</response>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AuthController.ChangePassword(MultiTenantBilling.Api.Controllers.ChangePasswordDto)">
+            <summary>
+            Changes the password for the authenticated user.
+            </summary>
+            <param name="changePasswordDto">The current and new passwords.</param>
+            <returns>True if the password was changed successfully.</returns>
+            <response code="200">Returns true if successful.</response>
+            <response code="401">If the user is not authenticated.</response>
+        </member>
+        <member name="T:MultiTenantBilling.Api.Controllers.ChangePasswordDto">
+            <summary>
+            DTO for changing user password.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.ChangePasswordDto.CurrentPassword">
+            <summary>
+            The user's current password.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.ChangePasswordDto.NewPassword">
+            <summary>
+            The user's new password.
+            </summary>
+        </member>
+        <member name="T:MultiTenantBilling.Api.Controllers.BillingController">
+            <summary>
+            Controller for billing operations including subscriptions, invoices, and payments.
+            </summary>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.#ctor(MultiTenantBilling.Application.Services.ISubscriptionService,MultiTenantBilling.Application.Services.IInvoiceService,MultiTenantBilling.Application.Services.IPaymentService,MultiTenantBilling.Application.Services.IUsageService,MultiTenantBilling.Api.Services.IApiTenantService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MultiTenantBilling.Api.Controllers.BillingController"/> class.
+            </summary>
+            <param name="subscriptionService">The subscription service.</param>
+            <param name="invoiceService">The invoice service.</param>
+            <param name="paymentService">The payment service.</param>
+            <param name="usageService">The usage service.</param>
+            <param name="tenantService">The tenant service.</param>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.CreateSubscription(System.Guid)">
+            <summary>
+            Creates a new subscription for the tenant.
+            </summary>
+            <param name="planId">The ID of the plan to subscribe to.</param>
+            <returns>The created subscription.</returns>
+            <response code="200">Returns the created subscription.</response>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.RecordUsage(System.Guid,MultiTenantBilling.Api.Controllers.UsageRecordRequest)">
+            <summary>
+            Records usage for a subscription.
+            </summary>
+            <param name="subscriptionId">The ID of the subscription.</param>
+            <param name="request">The usage record details.</param>
+            <returns>The recorded usage record.</returns>
+            <response code="200">Returns the recorded usage record.</response>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.GenerateInvoice(System.Guid)">
+            <summary>
+            Generates an invoice for a subscription.
+            </summary>
+            <param name="subscriptionId">The ID of the subscription.</param>
+            <returns>The generated invoice.</returns>
+            <response code="200">Returns the generated invoice.</response>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.ProcessPayment(System.Guid,MultiTenantBilling.Api.Controllers.PaymentRequest)">
+            <summary>
+            Processes a payment for an invoice.
+            </summary>
+            <param name="invoiceId">The ID of the invoice.</param>
+            <param name="request">The payment details.</param>
+            <returns>The processed payment.</returns>
+            <response code="200">Returns the processed payment.</response>
+        </member>
+        <member name="T:MultiTenantBilling.Api.Controllers.UsageRecordRequest">
+            <summary>
+            DTO for recording usage.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.UsageRecordRequest.MetricName">
+            <summary>
+            The name of the metric being tracked.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.UsageRecordRequest.Quantity">
+            <summary>
+            The quantity of usage.
+            </summary>
+        </member>
+        <member name="T:MultiTenantBilling.Api.Controllers.PaymentRequest">
+            <summary>
+            DTO for processing payments.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.PaymentRequest.PaymentMethodId">
+            <summary>
+            The payment method ID.
+            </summary>
+        </member>
+    </members>
+</doc>
