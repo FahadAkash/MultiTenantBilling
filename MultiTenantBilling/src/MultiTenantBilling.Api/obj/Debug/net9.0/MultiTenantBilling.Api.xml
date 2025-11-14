@@ -4,6 +4,64 @@
         <name>MultiTenantBilling.Api</name>
     </assembly>
     <members>
+        <member name="M:MultiTenantBilling.Api.Controllers.AdminController.CreatePlan(MultiTenantBilling.Api.Controllers.CreatePlanRequest)">
+            <summary>
+            Creates a new plan for the tenant.
+            </summary>
+            <param name="request">The plan details.</param>
+            <returns>The created plan.</returns>
+            <response code="200">Returns the created plan.</response>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AdminController.GetPlan(System.Guid)">
+            <summary>
+            Gets a plan by ID.
+            </summary>
+            <param name="planId">The ID of the plan.</param>
+            <returns>The plan details.</returns>
+            <response code="200">Returns the plan.</response>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AdminController.GetAllPlans">
+            <summary>
+            Gets all plans for the tenant.
+            </summary>
+            <returns>A list of all plans.</returns>
+            <response code="200">Returns the list of plans.</response>
+        </member>
+        <member name="T:MultiTenantBilling.Api.Controllers.CreatePlanRequest">
+            <summary>
+            DTO for creating a plan.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.CreatePlanRequest.Name">
+            <summary>
+            The name of the plan.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.CreatePlanRequest.Description">
+            <summary>
+            The description of the plan.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.CreatePlanRequest.MonthlyPrice">
+            <summary>
+            The monthly price of the plan.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.CreatePlanRequest.MaxUsers">
+            <summary>
+            The maximum number of users allowed.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.CreatePlanRequest.MaxStorageGb">
+            <summary>
+            The maximum storage in GB.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.CreatePlanRequest.IsActive">
+            <summary>
+            Whether the plan is active.
+            </summary>
+        </member>
         <member name="T:MultiTenantBilling.Api.Controllers.AuthController">
             <summary>
             Authentication controller for user registration, login, and password management.
@@ -62,17 +120,14 @@
             Controller for billing operations including subscriptions, invoices, and payments.
             </summary>
         </member>
-        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.#ctor(MultiTenantBilling.Application.Services.ISubscriptionService,MultiTenantBilling.Application.Services.IInvoiceService,MultiTenantBilling.Application.Services.IPaymentService,MultiTenantBilling.Application.Services.IUsageService,MultiTenantBilling.Api.Services.IApiTenantService)">
+        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.#ctor(MediatR.IMediator,MultiTenantBilling.Api.Services.IApiTenantService)">
             <summary>
             Initializes a new instance of the <see cref="T:MultiTenantBilling.Api.Controllers.BillingController"/> class.
             </summary>
-            <param name="subscriptionService">The subscription service.</param>
-            <param name="invoiceService">The invoice service.</param>
-            <param name="paymentService">The payment service.</param>
-            <param name="usageService">The usage service.</param>
+            <param name="mediator">The MediatR mediator for CQRS.</param>
             <param name="tenantService">The tenant service.</param>
         </member>
-        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.CreateSubscription(System.Guid)">
+        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.CreateSubscription(MultiTenantBilling.Api.Controllers.CreateSubscriptionRequest)">
             <summary>
             Creates a new subscription for the tenant.
             </summary>
@@ -106,6 +161,28 @@
             <returns>The processed payment.</returns>
             <response code="200">Returns the processed payment.</response>
         </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.GetAllPlans">
+            <summary>
+            Gets all available plans for the tenant.
+            </summary>
+            <returns>A list of all available plans.</returns>
+            <response code="200">Returns the list of plans.</response>
+        </member>
+        <member name="T:MultiTenantBilling.Api.Controllers.CreateSubscriptionRequest">
+            <summary>
+            DTO for creating a subscription.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.CreateSubscriptionRequest.PlanId">
+            <summary>
+            The ID of the plan to subscribe to.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.CreateSubscriptionRequest.PaymentMethodId">
+            <summary>
+            Optional payment method ID for automatic billing.
+            </summary>
+        </member>
         <member name="T:MultiTenantBilling.Api.Controllers.UsageRecordRequest">
             <summary>
             DTO for recording usage.
@@ -129,6 +206,12 @@
         <member name="P:MultiTenantBilling.Api.Controllers.PaymentRequest.PaymentMethodId">
             <summary>
             The payment method ID.
+            </summary>
+        </member>
+        <member name="T:MultiTenantBilling.Api.Filters.HangfireAuthorizationFilter">
+            <summary>
+            Authorization filter for Hangfire dashboard
+            TODO: Implement proper authentication/authorization in production
             </summary>
         </member>
     </members>

@@ -1,9 +1,12 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MultiTenantBilling.Api.Attributes;
 using MultiTenantBilling.Api.Services;
+using MultiTenantBilling.Application.Commands;
 using MultiTenantBilling.Application.DTOs;
-using MultiTenantBilling.Application.Services;
+using MultiTenantBilling.Application.Queries;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MultiTenantBilling.Api.Controllers
@@ -16,31 +19,17 @@ namespace MultiTenantBilling.Api.Controllers
     [RequireTenant]
     public class BillingController : ControllerBase
     {
-        private readonly ISubscriptionService _subscriptionService;
-        private readonly IInvoiceService _invoiceService;
-        private readonly IPaymentService _paymentService;
-        private readonly IUsageService _usageService;
+        private readonly IMediator _mediator;
         private readonly IApiTenantService _tenantService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BillingController"/> class.
         /// </summary>
-        /// <param name="subscriptionService">The subscription service.</param>
-        /// <param name="invoiceService">The invoice service.</param>
-        /// <param name="paymentService">The payment service.</param>
-        /// <param name="usageService">The usage service.</param>
+        /// <param name="mediator">The MediatR mediator for CQRS.</param>
         /// <param name="tenantService">The tenant service.</param>
-        public BillingController(
-            ISubscriptionService subscriptionService,
-            IInvoiceService invoiceService,
-            IPaymentService paymentService,
-            IUsageService usageService,
-            IApiTenantService tenantService)
+        public BillingController(IMediator mediator, IApiTenantService tenantService)
         {
-            _subscriptionService = subscriptionService;
-            _invoiceService = invoiceService;
-            _paymentService = paymentService;
-            _usageService = usageService;
+            _mediator = mediator;
             _tenantService = tenantService;
         }
 
@@ -52,10 +41,16 @@ namespace MultiTenantBilling.Api.Controllers
         /// <response code="200">Returns the created subscription.</response>
         [HttpPost("subscriptions")]
         [ProducesResponseType(typeof(SubscriptionDto), 200)]
-        public async Task<ActionResult<SubscriptionDto>> CreateSubscription(Guid planId)
+        public async Task<ActionResult<SubscriptionDto>> CreateSubscription([FromBody] CreateSubscriptionRequest request)
         {
             var tenantId = _tenantService.GetRequiredTenantId();
-            var subscription = await _subscriptionService.CreateSubscriptionAsync(tenantId, planId, DateTime.UtcNow);
+            var subscription = await _mediator.Send(new CreateSubscriptionCommand
+            {
+                TenantId = tenantId,
+                PlanId = request.PlanId,
+                StartDate = DateTime.UtcNow,
+                PaymentMethodId = request.PaymentMethodId
+            });
             return Ok(subscription);
         }
 
@@ -70,7 +65,12 @@ namespace MultiTenantBilling.Api.Controllers
         [ProducesResponseType(typeof(UsageRecordDto), 200)]
         public async Task<ActionResult<UsageRecordDto>> RecordUsage(Guid subscriptionId, [FromBody] UsageRecordRequest request)
         {
-            var usageRecord = await _usageService.RecordUsageAsync(subscriptionId, request.MetricName, request.Quantity);
+            var usageRecord = await _mediator.Send(new RecordUsageCommand
+            {
+                SubscriptionId = subscriptionId,
+                MetricName = request.MetricName,
+                Quantity = request.Quantity
+            });
             return Ok(usageRecord);
         }
 
@@ -84,7 +84,12 @@ namespace MultiTenantBilling.Api.Controllers
         [ProducesResponseType(typeof(InvoiceDto), 200)]
         public async Task<ActionResult<InvoiceDto>> GenerateInvoice(Guid subscriptionId)
         {
-            var invoice = await _invoiceService.GenerateInvoiceAsync(subscriptionId, DateTime.UtcNow);
+            var invoice = await _mediator.Send(new GenerateInvoiceCommand
+            {
+                SubscriptionId = subscriptionId,
+                InvoiceDate = DateTime.UtcNow,
+                IncludeOverage = true
+            });
             return Ok(invoice);
         }
 
@@ -99,9 +104,45 @@ namespace MultiTenantBilling.Api.Controllers
         [ProducesResponseType(typeof(PaymentDto), 200)]
         public async Task<ActionResult<PaymentDto>> ProcessPayment(Guid invoiceId, [FromBody] PaymentRequest request)
         {
-            var payment = await _paymentService.ProcessPaymentAsync(invoiceId, request.PaymentMethodId);
+            var payment = await _mediator.Send(new ProcessPaymentCommand
+            {
+                InvoiceId = invoiceId,
+                PaymentMethodId = request.PaymentMethodId,
+                IsRetry = false,
+                RetryAttempt = 0
+            });
             return Ok(payment);
         }
+
+        /// <summary>
+        /// Gets all available plans for the tenant.
+        /// </summary>
+        /// <returns>A list of all available plans.</returns>
+        /// <response code="200">Returns the list of plans.</response>
+        [HttpGet("plans")]
+        [ProducesResponseType(typeof(IEnumerable<PlanDto>), 200)]
+        public async Task<ActionResult<IEnumerable<PlanDto>>> GetAllPlans()
+        {
+            var tenantId = _tenantService.GetRequiredTenantId();
+            var plans = await _mediator.Send(new GetAllPlansQuery { TenantId = tenantId });
+            return Ok(plans);
+        }
+    }
+
+    /// <summary>
+    /// DTO for creating a subscription.
+    /// </summary>
+    public class CreateSubscriptionRequest
+    {
+        /// <summary>
+        /// The ID of the plan to subscribe to.
+        /// </summary>
+        public Guid PlanId { get; set; }
+
+        /// <summary>
+        /// Optional payment method ID for automatic billing.
+        /// </summary>
+        public string? PaymentMethodId { get; set; }
     }
 
     /// <summary>

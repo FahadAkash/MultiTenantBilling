@@ -63,7 +63,7 @@ builder.Services.AddSwaggerGen(c =>
 
 // Register database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register tenant services
 builder.Services.AddHttpContextAccessor();
@@ -78,6 +78,10 @@ builder.Services.AddScoped<ITenantRepository<Invoice>, InvoiceRepository>();
 builder.Services.AddScoped<ITenantRepository<User>, UserRepository>();
 builder.Services.AddScoped<ITenantRepository<Role>, RoleRepository>();
 builder.Services.AddScoped<ITenantRepository<UserRole>, UserRoleRepository>();
+builder.Services.AddScoped<ITenantRepository<Plan>, PlanRepository>();
+builder.Services.AddScoped<ITenantRepository<UsageRecord>, UsageRecordRepository>();
+builder.Services.AddScoped<ITenantRepository<Payment>, PaymentRepository>();
+builder.Services.AddScoped<ITenantRepository<Tenant>, TenantRepository>();
 
 // Register application services
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
@@ -113,6 +117,9 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Add MediatR
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IAuthService).Assembly));
+
 // Add authorization with policies
 builder.Services.AddAuthorization(options =>
 {
@@ -139,12 +146,12 @@ app.MapScalarApiReference(options =>
 
 app.UseHttpsRedirection();
 
-// Register tenant middleware
-app.UseMiddleware<TenantMiddleware>();
-
-// Add authentication and authorization middleware
+// Add authentication and authorization middleware FIRST
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Register tenant middleware AFTER authentication
+app.UseMiddleware<TenantMiddleware>();
 
 // Add controllers
 app.MapControllers(); // Add this to map controller routes

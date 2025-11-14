@@ -9,7 +9,9 @@ namespace MultiTenantBilling.Infrastructure.Repositories
     public interface ITenantRepository<T> where T : BaseEntity, ITenantEntity
     {
         Task<T> GetByIdAsync(Guid id);
+        Task<T> GetByIdForTenantAsync(Guid id, Guid tenantId);
         Task<IEnumerable<T>> GetAllAsync();
+        Task<IEnumerable<T>> GetAllForTenantAsync(Guid tenantId);
         Task<IEnumerable<T>> GetByTenantIdAsync(Guid tenantId);
         Task<T> AddAsync(T entity);
         Task<T> UpdateAsync(T entity);

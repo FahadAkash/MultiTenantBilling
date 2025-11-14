@@ -125,8 +125,8 @@ namespace MultiTenantBilling.Application.Services
                 return false;
             }
 
-            // Find role by name
-            var role = await GetRoleByNameAsync(roleName);
+            // Find or create role by name
+            var role = await GetOrCreateRoleAsync(roleName, $"{roleName} role", user.TenantId);
             if (role == null)
             {
                 return false;
@@ -139,8 +139,15 @@ namespace MultiTenantBilling.Application.Services
                 return true; // User already has this role
             }
 
-            // In a real implementation, you would create a user-role association
-            // For now, we'll just return true
+            // Create user-role association
+            var userRole = new UserRole
+            {
+                TenantId = user.TenantId,
+                UserId = user.Id,
+                RoleId = role.Id
+            };
+
+            await _userRoleRepository.AddAsync(userRole);
             return true;
         }
 
@@ -148,49 +155,72 @@ namespace MultiTenantBilling.Application.Services
 
         private async Task<User> GetUserByEmailAsync(string email)
         {
-            // In a real implementation, you would query the database
-            // For now, we'll simulate with a sample user
-            if (email == "admin@example.com")
-            {
-                return new User
-                {
-                    Id = Guid.NewGuid(),
-                    TenantId = _tenantService.GetRequiredTenantId(),
-                    Email = email,
-                    FirstName = "Admin",
-                    LastName = "User",
-                    IsActive = true
-                };
-            }
-
-            return null;
+            // Get the current tenant ID
+            var tenantId = _tenantService.GetRequiredTenantId();
+            
+            // Query the database for the user with the specified email and tenant ID
+            var users = await _userRepository.GetByTenantIdAsync(tenantId);
+            return users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
 
         private async Task<Role> GetRoleByNameAsync(string roleName)
         {
-            // In a real implementation, you would query the database
-            // For now, we'll simulate with sample roles
-            return new Role
+            // Get the current tenant ID
+            var tenantId = _tenantService.GetRequiredTenantId();
+            
+            // Query the database for the role with the specified name and tenant ID
+            var roles = await _roleRepository.GetByTenantIdAsync(tenantId);
+            return roles.FirstOrDefault(r => r.Name.Equals(roleName, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private async Task<Role> GetOrCreateRoleAsync(string roleName, string description, Guid tenantId)
+        {
+            // First, try to find the role in the database
+            var existingRole = await GetRoleByNameAsync(roleName);
+            if (existingRole != null)
             {
-                Id = Guid.NewGuid(),
-                TenantId = _tenantService.GetRequiredTenantId(),
+                return existingRole;
+            }
+
+            // Role doesn't exist, create it
+            var newRole = new Role
+            {
+                TenantId = tenantId,
                 Name = roleName,
-                Description = $"{roleName} role"
+                Description = description
             };
+
+            // Save the role to the database
+            var createdRole = await _roleRepository.AddAsync(newRole);
+            return createdRole;
         }
 
         private async Task<UserRole> GetUserRoleAsync(Guid userId, Guid roleId)
         {
-            // In a real implementation, you would query the database
-            // For now, we'll return null to simulate no existing association
-            return null;
+            // Get the current tenant ID
+            var tenantId = _tenantService.GetRequiredTenantId();
+            
+            // Query the database for the user-role association with the specified user ID, role ID, and tenant ID
+            var userRoles = await _userRoleRepository.GetByTenantIdAsync(tenantId);
+            return userRoles.FirstOrDefault(ur => ur.UserId == userId && ur.RoleId == roleId);
         }
 
         private async Task<string[]> GetUserRolesAsync(Guid userId)
         {
-            // In a real implementation, you would query the database
-            // For now, we'll return sample roles
-            return new[] { "User", "Admin" };
+            // Get the current tenant ID
+            var tenantId = _tenantService.GetRequiredTenantId();
+            
+            // Query the database for the user roles with the specified user ID and tenant ID
+            var userRoles = await _userRoleRepository.GetByTenantIdAsync(tenantId);
+            var userSpecificRoles = userRoles.Where(ur => ur.UserId == userId);
+            
+            // Get the role names for these user-role associations
+            var roles = await _roleRepository.GetByTenantIdAsync(tenantId);
+            var roleNames = userSpecificRoles
+                .Join(roles, ur => ur.RoleId, r => r.Id, (ur, r) => r.Name)
+                .ToArray();
+                
+            return roleNames;
         }
 
         private bool RoleHasPermission(string roleName, string permission)

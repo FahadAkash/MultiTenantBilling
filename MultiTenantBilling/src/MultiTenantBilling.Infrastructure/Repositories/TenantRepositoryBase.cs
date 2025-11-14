@@ -18,15 +18,29 @@ namespace MultiTenantBilling.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<T> GetByIdAsync(Guid id)
+        public virtual async Task<T> GetByIdAsync(Guid id)
         {
-            return await _context.Set<T>()
-                .FirstOrDefaultAsync(e => e.Id == id);
+            // This method should be implemented by concrete classes to ensure tenant filtering
+            throw new NotImplementedException("Use GetByIdForTenantAsync instead or implement tenant filtering in concrete class");
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<T> GetByIdForTenantAsync(Guid id, Guid tenantId)
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>()
+                .FirstOrDefaultAsync(e => e.Id == id && e.TenantId == tenantId);
+        }
+
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
+        {
+            // This method should be implemented by concrete classes to ensure tenant filtering
+            throw new NotImplementedException("Use GetAllForTenantAsync instead or implement tenant filtering in concrete class");
+        }
+
+        public async Task<IEnumerable<T>> GetAllForTenantAsync(Guid tenantId)
+        {
+            return await _context.Set<T>()
+                .Where(e => e.TenantId == tenantId)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<T>> GetByTenantIdAsync(Guid tenantId)

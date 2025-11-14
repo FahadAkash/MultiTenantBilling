@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "1YPw1X1Srg8=",
+  "dgSpecHash": "y7vRUcA0AI4=",
   "success": true,
   "projectFilePath": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Domain\\MultiTenantBilling.Domain.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\fahad\\.nuget\\packages\\mediatr\\12.4.1\\mediatr.12.4.1.nupkg.sha512",
+    "C:\\Users\\fahad\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
+    "C:\\Users\\fahad\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
