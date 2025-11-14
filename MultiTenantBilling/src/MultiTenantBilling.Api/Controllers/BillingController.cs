@@ -17,14 +17,14 @@ namespace MultiTenantBilling.Api.Controllers
         private readonly IInvoiceService _invoiceService;
         private readonly IPaymentService _paymentService;
         private readonly IUsageService _usageService;
-        private readonly ITenantService _tenantService;
+        private readonly IApiTenantService _tenantService;
 
         public BillingController(
             ISubscriptionService subscriptionService,
             IInvoiceService invoiceService,
             IPaymentService paymentService,
             IUsageService usageService,
-            ITenantService tenantService)
+            IApiTenantService tenantService)
         {
             _subscriptionService = subscriptionService;
             _invoiceService = invoiceService;

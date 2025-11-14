@@ -14,3 +14,5 @@ F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Infrastru
 F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Infrastructure\obj\Debug\net9.0\refint\MultiTenantBilling.Infrastructure.dll
 F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Infrastructure\obj\Debug\net9.0\MultiTenantBilling.Infrastructure.pdb
 F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Infrastructure\obj\Debug\net9.0\ref\MultiTenantBilling.Infrastructure.dll
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Infrastructure\bin\Debug\net9.0\MultiTenantBilling.Infrastructure.runtimeconfig.json
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Infrastructure\obj\Debug\net9.0\MultiTenantBilling.Infrastructure.genruntimeconfig.cache

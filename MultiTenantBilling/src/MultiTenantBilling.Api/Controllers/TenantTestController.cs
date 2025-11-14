@@ -10,9 +10,9 @@ namespace MultiTenantBilling.Api.Controllers
     [Route("api/[controller]")]
     public class TenantTestController : ControllerBase
     {
-        private readonly ITenantService _tenantService;
+        private readonly IApiTenantService _tenantService;
 
-        public TenantTestController(ITenantService tenantService)
+        public TenantTestController(IApiTenantService tenantService)
         {
             _tenantService = tenantService;
         }

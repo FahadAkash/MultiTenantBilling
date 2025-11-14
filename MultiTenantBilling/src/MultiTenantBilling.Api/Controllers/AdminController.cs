@@ -1,40 +1,46 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MultiTenantBilling.Api.Attributes;
-using System;
+using System.Security.Claims;
 
 namespace MultiTenantBilling.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [RequireTenant]
+    [Authorize] // Require authentication for all actions in this controller
     public class AdminController : ControllerBase
     {
         [HttpGet("dashboard")]
-        [AuthorizeRole("Admin")]
+        [Authorize(Roles = "Admin")] // Require Admin role
         public ActionResult<string> GetAdminDashboard()
         {
-            return Ok("Admin Dashboard - Only accessible by users with Admin role");
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            return Ok($"Admin Dashboard - Welcome {userEmail}!");
         }
 
         [HttpGet("billing")]
-        [AuthorizePermission("view_billing")]
+        [Authorize(Policy = "ViewBilling")] // Require ViewBilling policy
         public ActionResult<string> GetBillingInfo()
         {
-            return Ok("Billing Information - Only accessible by users with view_billing permission");
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            return Ok($"Billing Information - Access granted to {userEmail}");
         }
 
         [HttpPost("subscriptions")]
-        [AuthorizePermission("manage_subscriptions")]
+        [Authorize(Policy = "ManageSubscriptions")] // Require ManageSubscriptions policy
         public ActionResult<string> CreateSubscription()
         {
-            return Ok("Subscription created - Only accessible by users with manage_subscriptions permission");
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            return Ok($"Subscription created - Action performed by {userEmail}");
         }
 
         [HttpPost("payments")]
-        [AuthorizePermission("process_payments")]
+        [Authorize(Policy = "ProcessPayments")] // Require ProcessPayments policy
         public ActionResult<string> ProcessPayment()
         {
-            return Ok("Payment processed - Only accessible by users with process_payments permission");
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            return Ok($"Payment processed - Action performed by {userEmail}");
         }
     }
 }

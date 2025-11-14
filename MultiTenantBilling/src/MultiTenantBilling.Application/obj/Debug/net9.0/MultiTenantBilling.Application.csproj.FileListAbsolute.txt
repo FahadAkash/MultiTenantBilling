@@ -14,3 +14,5 @@ F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Applicati
 F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Application\obj\Debug\net9.0\refint\MultiTenantBilling.Application.dll
 F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Application\obj\Debug\net9.0\MultiTenantBilling.Application.pdb
 F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Application\obj\Debug\net9.0\ref\MultiTenantBilling.Application.dll
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Application\bin\Debug\net9.0\MultiTenantBilling.Infrastructure.dll
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Application\bin\Debug\net9.0\MultiTenantBilling.Infrastructure.pdb

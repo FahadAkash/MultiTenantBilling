@@ -4,7 +4,7 @@ using System;
 
 namespace MultiTenantBilling.Api.Services
 {
-    public class TenantService : ITenantService
+    public class TenantService : IApiTenantService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<TenantService> _logger;

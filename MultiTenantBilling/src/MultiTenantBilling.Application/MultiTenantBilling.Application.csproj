@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MultiTenantBilling.Domain\MultiTenantBilling.Domain.csproj" />
+    <ProjectReference Include="..\MultiTenantBilling.Infrastructure\MultiTenantBilling.Infrastructure.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

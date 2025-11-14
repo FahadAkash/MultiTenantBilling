@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MultiTenantBilling.Application.DTOs;
 using MultiTenantBilling.Application.Services;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MultiTenantBilling.Api.Controllers
@@ -19,22 +20,42 @@ namespace MultiTenantBilling.Api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<AuthResponseDto>> Register([FromBody] RegisterDto registerDto)
         {
-            var result = await _authService.RegisterAsync(registerDto);
-            return Ok(result);
+            try
+            {
+                var result = await _authService.RegisterAsync(registerDto);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponseDto>> Login([FromBody] LoginDto loginDto)
         {
-            var result = await _authService.LoginAsync(loginDto);
-            return Ok(result);
+            try
+            {
+                var result = await _authService.LoginAsync(loginDto);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Unauthorized(new { Error = ex.Message });
+            }
         }
 
         [HttpPost("change-password")]
         public async Task<ActionResult<bool>> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
-            // In a real implementation, you would get the user email from the JWT token
-            var result = await _authService.ChangePasswordAsync("user@example.com", changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
+            // Get the user email from the JWT token
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized();
+            }
+
+            var result = await _authService.ChangePasswordAsync(userEmail, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
             return Ok(result);
         }
     }

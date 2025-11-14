@@ -1,3 +1,4 @@
+using MultiTenantBilling.Application.Services;
 using System;
 
 namespace MultiTenantBilling.Application.DTOs

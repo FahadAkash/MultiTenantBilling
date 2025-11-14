@@ -2,7 +2,7 @@ using System;
 
 namespace MultiTenantBilling.Api.Services
 {
-    public interface ITenantService
+    public interface IApiTenantService
     {
         Guid? GetTenantId();
         void SetTenantId(Guid tenantId);
