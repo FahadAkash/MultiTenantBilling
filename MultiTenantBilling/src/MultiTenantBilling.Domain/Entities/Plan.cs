@@ -1,10 +1,12 @@
 using MultiTenantBilling.Domain.Common;
+using MultiTenantBilling.Domain.Interface;
 using System.Collections.Generic;
 
 namespace MultiTenantBilling.Domain.Entities
 {
-    public class Plan : BaseEntity
+    public class Plan : BaseEntity, ITenantEntity
     {
+        public Guid TenantId { get; set; }
         public string Name { get; set; } = default!;
         public string Description { get; set; } = default!;
         public decimal MonthlyPrice { get; set; }

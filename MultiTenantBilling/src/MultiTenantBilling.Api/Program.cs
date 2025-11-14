@@ -1,5 +1,10 @@
+using Microsoft.EntityFrameworkCore;
 using MultiTenantBilling.Api.Middleware;
 using MultiTenantBilling.Api.Services;
+using MultiTenantBilling.Application.Services;
+using MultiTenantBilling.Domain.Entities;
+using MultiTenantBilling.Infrastructure.Data;
+using MultiTenantBilling.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,9 +12,25 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// Register database context
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // Register tenant services
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ITenantService, TenantService>();
+
+// Register repositories
+builder.Services.AddScoped<ITenantRepository<Subscription>, SubscriptionRepository>();
+builder.Services.AddScoped<ITenantRepository<Invoice>, InvoiceRepository>();
+
+// Register application services
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IUsageService, UsageService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 
 var app = builder.Build();
 

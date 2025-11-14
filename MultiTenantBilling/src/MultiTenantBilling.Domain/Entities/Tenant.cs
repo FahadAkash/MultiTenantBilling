@@ -1,10 +1,12 @@
 using MultiTenantBilling.Domain.Common;
+using MultiTenantBilling.Domain.Interface;
 using System.Collections.Generic;
 
 namespace MultiTenantBilling.Domain.Entities
 {
-    public class Tenant : BaseEntity
+    public class Tenant : BaseEntity, ITenantEntity
     {
+        public Guid TenantId { get; set; }
         public string Name { get; set; } = default!;
         public string Subdomain { get; set; } = default!;
         public string Email { get; set; } = default!;

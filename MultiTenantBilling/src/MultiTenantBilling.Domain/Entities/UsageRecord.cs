@@ -1,10 +1,12 @@
 using MultiTenantBilling.Domain.Common;
+using MultiTenantBilling.Domain.Interface;
 using System;
 
 namespace MultiTenantBilling.Domain.Entities
 {
-    public class UsageRecord : BaseEntity
+    public class UsageRecord : BaseEntity, ITenantEntity
     {
+        public Guid TenantId { get; set; }
         public Guid SubscriptionId { get; set; }
         public Subscription Subscription { get; set; } = default!;
 

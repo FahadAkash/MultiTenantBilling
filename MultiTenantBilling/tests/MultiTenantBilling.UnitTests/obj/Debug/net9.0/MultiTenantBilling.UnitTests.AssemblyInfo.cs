@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MultiTenantBilling.UnitTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ee88479774250c4f2fb2b99e978e3251b261ff2e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+94016b0cfc540126a87b37757c771bd97c0511b7")]
 [assembly: System.Reflection.AssemblyProductAttribute("MultiTenantBilling.UnitTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MultiTenantBilling.UnitTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
