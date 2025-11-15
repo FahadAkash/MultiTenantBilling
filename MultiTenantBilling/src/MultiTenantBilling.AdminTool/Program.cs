@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿﻿﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MultiTenantBilling.Application.DTOs;
@@ -15,7 +15,7 @@ var builder = Host.CreateApplicationBuilder(args);
 
 // Register database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql("Host=localhost;Port=5432;Database=multitenant;Username=postgres;Password=YOUR_SECURE_PASSWORD"));
+    options.UseNpgsql("Host=localhost;Port=5432;Database=multitenant;Username=postgres;Password=fahadakashMain"));
 
 // Register tenant services
 builder.Services.AddScoped<ITenantService, MockTenantService>();
@@ -108,19 +108,20 @@ try
     
     if (adminUser == null)
     {
-        // Create an admin user
-        var registerDto = new RegisterDto
+        // Create an admin user directly in the existing tenant
+        Console.WriteLine("Creating admin user...");
+        var adminUserEntity = new User
         {
+            TenantId = tenantId,
             Email = "admin@example.com",
-            Password = "YOUR_SECURE_ADMIN_PASSWORD",
+            PasswordHash = "Admin123!", // Using the simple hash from AuthService
             FirstName = "Admin",
-            LastName = "User"
+            LastName = "User",
+            IsActive = true
         };
 
-        Console.WriteLine("Creating admin user...");
-        var authResponse = await authService.RegisterAsync(registerDto);
-        Console.WriteLine($"Admin user created successfully with ID: {authResponse.User.Id}");
-        adminUser = await userRepository.GetByIdAsync(authResponse.User.Id);
+        adminUser = await userRepository.AddAsync(adminUserEntity);
+        Console.WriteLine($"Admin user created successfully with ID: {adminUser.Id}");
     }
     else
     {

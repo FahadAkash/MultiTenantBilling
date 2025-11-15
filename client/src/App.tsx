@@ -8,6 +8,21 @@ import SubscriptionManagement from './pages/SubscriptionManagement';
 import InvoiceHistory from './pages/InvoiceHistory';
 import PaymentProcessing from './pages/PaymentProcessing';
 import AdminDashboard from './pages/AdminDashboard';
+import ProtectedRoute from './components/ProtectedRoute';
+import authService from './services/authService';
+
+// Initialize tenant ID if user is authenticated
+const initializeApp = () => {
+  const token = authService.getAuthToken();
+  const existingTenantId = authService.getTenantId();
+  
+  if (token && !existingTenantId) {
+    // Set the default tenant ID for authenticated users if not already set
+    authService.setTenantId('11111111-1111-1111-1111-111111111111');
+  }
+};
+
+initializeApp();
 
 function App() {
   return (
@@ -15,13 +30,13 @@ function App() {
       <Router>
         <div className="min-h-screen bg-gray-50">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/subscriptions" element={<SubscriptionManagement />} />
-            <Route path="/invoices" element={<InvoiceHistory />} />
-            <Route path="/payments" element={<PaymentProcessing />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/subscriptions" element={<ProtectedRoute><SubscriptionManagement /></ProtectedRoute>} />
+            <Route path="/invoices" element={<ProtectedRoute><InvoiceHistory /></ProtectedRoute>} />
+            <Route path="/payments" element={<ProtectedRoute><PaymentProcessing /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
           </Routes>
         </div>
       </Router>

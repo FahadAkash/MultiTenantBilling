@@ -21,6 +21,8 @@ const Login = () => {
       
       // Store auth data
       authService.setAuthData(response.token, response.user);
+      // Set the default tenant ID
+      authService.setTenantId('11111111-1111-1111-1111-111111111111');
       
       // Dispatch success action
       dispatch(loginSuccess({ user: response.user, token: response.token }));

@@ -38,8 +38,19 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Handle unauthorized access
-      localStorage.removeItem('authToken');
-      window.location.href = '/login';
+      // Only clear auth data if it's actually an auth token issue, not a tenant ID issue
+      const message = error.response?.data?.Error || error.response?.data?.error || '';
+      if (message.includes('Tenant ID is required') || message.includes('tenant')) {
+        // This is likely a tenant ID issue, don't clear the auth token
+        // Just redirect to login
+        window.location.href = '/login';
+      } else {
+        // This is likely an auth token issue, clear the auth data
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('authUser');
+        localStorage.removeItem('tenantId');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
