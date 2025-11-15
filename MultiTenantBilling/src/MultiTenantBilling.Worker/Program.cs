@@ -5,6 +5,7 @@ using MultiTenantBilling.Infrastructure.Data;
 using MultiTenantBilling.Infrastructure.Repositories;
 using MultiTenantBilling.Worker;
 using MultiTenantBilling.Worker.Services;
+using MultiTenantBilling.Application.BackgroundJobs;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -61,6 +62,9 @@ builder.Services.AddScoped<IPlanService>(provider =>
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IUsageService, UsageService>();
+
+// Register background jobs
+builder.Services.AddScoped<InvoiceGenerationJob>();
 
 // Add MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IAuthService).Assembly));

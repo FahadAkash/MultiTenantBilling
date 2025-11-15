@@ -5,6 +5,9 @@ using MultiTenantBilling.Application.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MultiTenantBilling.Application.BackgroundJobs;
+using MultiTenantBilling.Infrastructure.Repositories;
+using MultiTenantBilling.Domain.Entities;
 
 namespace MultiTenantBilling.Worker
 {
@@ -50,17 +53,53 @@ namespace MultiTenantBilling.Worker
                 var invoiceService = scope.ServiceProvider.GetRequiredService<IInvoiceService>();
                 var paymentService = scope.ServiceProvider.GetRequiredService<IPaymentService>();
                 
-                // In a real implementation, you would:
-                // 1. Find subscriptions that need billing today
-                // 2. Generate invoices for those subscriptions
-                // 3. Attempt to process payments for pending invoices
-                // 4. Handle failed payments (dunning process)
+                // Run the invoice generation job
+                var invoiceJob = scope.ServiceProvider.GetRequiredService<InvoiceGenerationJob>();
+                await invoiceJob.ExecuteAsync();
+                
+                // Process expired subscriptions (check for subscriptions that should be canceled)
+                await ProcessExpiredSubscriptions(scope, stoppingToken);
                 
                 _logger.LogInformation("Billing processing cycle completed");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred during billing processing");
+            }
+        }
+        
+        private async Task ProcessExpiredSubscriptions(IServiceScope scope, CancellationToken stoppingToken)
+        {
+            try
+            {
+                _logger.LogInformation("Processing expired subscriptions");
+                
+                var subscriptionRepository = scope.ServiceProvider.GetRequiredService<ITenantRepository<Subscription>>();
+                
+                // Get all expired subscriptions (status = "Expired")
+                var expiredSubscriptions = await subscriptionRepository.GetAllAsync();
+                var subscriptionsToCancel = expiredSubscriptions.Where(s => s.Status == "Expired").ToList();
+                
+                _logger.LogInformation("Found {Count} expired subscriptions to process", subscriptionsToCancel.Count);
+                
+                foreach (var subscription in subscriptionsToCancel)
+                {
+                    // Check if the subscription has been expired for more than the grace period (7 days)
+                    if (subscription.EndDate.AddDays(7) <= DateTime.UtcNow)
+                    {
+                        _logger.LogInformation("Canceling subscription {SubscriptionId} due to expiration", subscription.Id);
+                        
+                        // Cancel the subscription
+                        subscription.Status = "Canceled";
+                        await subscriptionRepository.UpdateAsync(subscription);
+                        
+                        // TODO: Send cancellation notification to customer
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred during expired subscription processing");
             }
         }
     }

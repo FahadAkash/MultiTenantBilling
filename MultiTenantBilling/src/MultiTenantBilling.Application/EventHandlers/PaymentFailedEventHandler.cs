@@ -2,6 +2,11 @@ using Hangfire;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MultiTenantBilling.Domain.Events;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using MultiTenantBilling.Infrastructure.Repositories;
+using MultiTenantBilling.Domain.Entities;
 
 namespace MultiTenantBilling.Application.EventHandlers
 {
@@ -12,16 +17,31 @@ namespace MultiTenantBilling.Application.EventHandlers
     public class PaymentFailedEventHandler : INotificationHandler<PaymentFailedEvent>
     {
         private readonly ILogger<PaymentFailedEventHandler> _logger;
+        private readonly ITenantRepository<Invoice> _invoiceRepository;
+        private readonly ITenantRepository<Subscription> _subscriptionRepository;
 
-        public PaymentFailedEventHandler(ILogger<PaymentFailedEventHandler> logger)
+        public PaymentFailedEventHandler(
+            ILogger<PaymentFailedEventHandler> logger,
+            ITenantRepository<Invoice> invoiceRepository,
+            ITenantRepository<Subscription> subscriptionRepository)
         {
             _logger = logger;
+            _invoiceRepository = invoiceRepository;
+            _subscriptionRepository = subscriptionRepository;
         }
 
         public async Task Handle(PaymentFailedEvent notification, CancellationToken cancellationToken)
         {
             _logger.LogWarning("Payment failed for invoice {InvoiceId}, attempt: {RetryAttempt}, reason: {FailureReason}",
                 notification.InvoiceId, notification.RetryAttempt, notification.FailureReason);
+
+            // Get the invoice to find the associated subscription
+            var invoice = await _invoiceRepository.GetByIdAsync(notification.InvoiceId);
+            if (invoice == null)
+            {
+                _logger.LogError("Invoice {InvoiceId} not found", notification.InvoiceId);
+                return;
+            }
 
             // Schedule retry based on attempt number
             if (notification.RetryAttempt < 3)
@@ -45,13 +65,12 @@ namespace MultiTenantBilling.Application.EventHandlers
                 _logger.LogError("Max retry attempts reached for invoice {InvoiceId}. Suspending subscription.",
                     notification.InvoiceId);
                 
-                // Schedule suspension via MediatR command
-                BackgroundJob.Enqueue<IMediator>(x => 
-                    x.Send(new Commands.SuspendSubscriptionCommand 
-                    { 
-                        SubscriptionId = Guid.Empty, // TODO: Get subscription ID from invoice
-                        Reason = $"Payment failed after {notification.RetryAttempt} attempts"
-                    }, cancellationToken));
+                // Cancel the subscription after multiple failed payment attempts
+                // Check if the invoice has a valid subscription ID (not empty GUID)
+                if (invoice.SubscriptionId != Guid.Empty)
+                {
+                    await CancelSubscriptionAsync(invoice.SubscriptionId);
+                }
             }
 
             // TODO: Send failure notification email
@@ -70,6 +89,26 @@ namespace MultiTenantBilling.Application.EventHandlers
                 _ => TimeSpan.FromDays(14)
             };
         }
+
+        private async Task CancelSubscriptionAsync(Guid subscriptionId)
+        {
+            try
+            {
+                var subscription = await _subscriptionRepository.GetByIdAsync(subscriptionId);
+                if (subscription != null)
+                {
+                    subscription.Status = "Canceled";
+                    await _subscriptionRepository.UpdateAsync(subscription);
+                    
+                    _logger.LogInformation("Subscription {SubscriptionId} canceled due to failed payments", subscriptionId);
+                    
+                    // TODO: Send cancellation notification to customer
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error canceling subscription {SubscriptionId}", subscriptionId);
+            }
+        }
     }
 }
-

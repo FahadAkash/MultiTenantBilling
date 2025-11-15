@@ -5,6 +5,7 @@ using MultiTenantBilling.Application.DTOs;
 using MultiTenantBilling.Domain.Entities;
 using MultiTenantBilling.Domain.Events;
 using MultiTenantBilling.Infrastructure.Repositories;
+using System;
 
 namespace MultiTenantBilling.Application.Handlers
 {
@@ -84,6 +85,48 @@ namespace MultiTenantBilling.Application.Handlers
 
             var createdInvoice = await _invoiceRepository.AddAsync(invoice);
 
+            // Check if this is a renewal (subscription is expiring)
+            bool isRenewal = subscription.EndDate.Date <= request.InvoiceDate.Date;
+            
+            // If this is a renewal, automatically attempt to process payment
+            if (isRenewal)
+            {
+                // TODO: Get actual payment method from customer
+                // For now, we'll use a placeholder payment method
+                string paymentMethodId = "pm_default";
+                
+                try
+                {
+                    // Process payment for the invoice
+                    var paymentResult = await _mediator.Send(new ProcessPaymentCommand
+                    {
+                        InvoiceId = createdInvoice.Id,
+                        PaymentMethodId = paymentMethodId,
+                        IsRetry = false,
+                        RetryAttempt = 0
+                    }, cancellationToken);
+                    
+                    _logger.LogInformation("Payment processed successfully for invoice {InvoiceId}", createdInvoice.Id);
+                    
+                    // If payment succeeded, renew the subscription
+                    if (paymentResult.Status == "Success")
+                    {
+                        await RenewSubscriptionAsync(subscription, plan, request.InvoiceDate);
+                    }
+                    else
+                    {
+                        // If payment failed, mark subscription as expired (grace period)
+                        await ExpireSubscriptionAsync(subscription);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error processing payment for invoice {InvoiceId}", createdInvoice.Id);
+                    // Payment failed, mark subscription as expired (grace period)
+                    await ExpireSubscriptionAsync(subscription);
+                }
+            }
+
             // Raise domain event
             await _mediator.Publish(new InvoiceGeneratedEvent
             {
@@ -106,6 +149,34 @@ namespace MultiTenantBilling.Application.Handlers
                 Status = createdInvoice.Status
             };
         }
+
+        private async Task RenewSubscriptionAsync(Subscription subscription, Plan plan, DateTime renewalDate)
+        {
+            _logger.LogInformation("Renewing subscription {SubscriptionId}", subscription.Id);
+
+            // Extend the subscription for another billing period
+            subscription.StartDate = renewalDate;
+            subscription.EndDate = renewalDate.AddMonths(1);
+            subscription.Status = "Active"; // Ensure it's active
+
+            // Update the subscription in the database
+            await _subscriptionRepository.UpdateAsync(subscription);
+
+            _logger.LogInformation("Subscription {SubscriptionId} renewed successfully. New end date: {EndDate}", 
+                subscription.Id, subscription.EndDate);
+        }
+        
+        private async Task ExpireSubscriptionAsync(Subscription subscription)
+        {
+            _logger.LogInformation("Expiring subscription {SubscriptionId}", subscription.Id);
+
+            // Mark the subscription as expired (grace period before cancellation)
+            subscription.Status = "Expired";
+
+            // Update the subscription in the database
+            await _subscriptionRepository.UpdateAsync(subscription);
+
+            _logger.LogInformation("Subscription {SubscriptionId} marked as expired", subscription.Id);
+        }
     }
 }
-

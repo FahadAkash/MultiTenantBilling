@@ -34,10 +34,15 @@ namespace MultiTenantBilling.Application.Handlers
             var activeSubscriptions = allSubscriptions
                 .Where(s => s.Status == "Active" && s.EndDate.Date <= request.BillingDate.Date)
                 .ToList();
+                
+            // Also include expired subscriptions that need to be processed for final billing
+            var expiredSubscriptions = allSubscriptions
+                .Where(s => s.Status == "Expired" && s.EndDate.Date <= request.BillingDate.Date)
+                .ToList();
 
             var result = new List<UpcomingBillingDto>();
 
-            foreach (var subscription in activeSubscriptions)
+            foreach (var subscription in activeSubscriptions.Concat(expiredSubscriptions))
             {
                 var tenant = await _tenantRepository.GetByIdAsync(subscription.TenantId);
                 result.Add(new UpcomingBillingDto
@@ -54,4 +59,3 @@ namespace MultiTenantBilling.Application.Handlers
         }
     }
 }
-
