@@ -208,6 +208,35 @@
             The payment method ID.
             </summary>
         </member>
+        <member name="T:MultiTenantBilling.Api.Controllers.HangfireTestController">
+            <summary>
+            Controller for testing Hangfire background jobs
+            </summary>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.HangfireTestController.TriggerInvoiceGeneration">
+            <summary>
+            Triggers the invoice generation job immediately
+            </summary>
+            <returns>Success message</returns>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.HangfireTestController.TriggerPaymentRetry">
+            <summary>
+            Triggers the payment retry job immediately
+            </summary>
+            <returns>Success message</returns>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.HangfireTestController.TriggerUsageAggregation">
+            <summary>
+            Triggers the usage aggregation job immediately
+            </summary>
+            <returns>Success message</returns>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.HangfireTestController.TriggerDunningProcess">
+            <summary>
+            Triggers the dunning process job immediately
+            </summary>
+            <returns>Success message</returns>
+        </member>
         <member name="T:MultiTenantBilling.Api.Filters.HangfireAuthorizationFilter">
             <summary>
             Authorization filter for Hangfire dashboard

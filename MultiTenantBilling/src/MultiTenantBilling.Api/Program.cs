@@ -1,10 +1,14 @@
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
+using MultiTenantBilling.Api.Filters;
 using MultiTenantBilling.Api.Middleware;
 using MultiTenantBilling.Api.Services;
+using MultiTenantBilling.Application.BackgroundJobs;
 using MultiTenantBilling.Application.Services;
 using MultiTenantBilling.Domain.Entities;
 using MultiTenantBilling.Infrastructure.Data;
@@ -160,6 +164,50 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ProcessPayments", policy => policy.RequireRole("Admin", "BillingManager"));
 });
 
+// Hangfire
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UsePostgreSqlStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddHangfireServer();
+
+// Register background jobs
+builder.Services.AddScoped<InvoiceGenerationJob>();
+builder.Services.AddScoped<PaymentRetryJob>();
+builder.Services.AddScoped<UsageAggregationJob>();
+builder.Services.AddScoped<DunningProcessJob>();
+
+// Schedule background jobs
+var jobId1 = "InvoiceGenerationJob";
+RecurringJob.AddOrUpdate<InvoiceGenerationJob>(
+    jobId1,
+    job => job.ExecuteAsync(),
+    "0 2 * * *", // Run daily at 2 AM
+    new RecurringJobOptions { TimeZone = TimeZoneInfo.Utc });
+
+var jobId2 = "PaymentRetryJob";
+RecurringJob.AddOrUpdate<PaymentRetryJob>(
+    jobId2,
+    job => job.ExecuteAsync(),
+    "*/15 * * * *", // Run every 15 minutes
+    new RecurringJobOptions { TimeZone = TimeZoneInfo.Utc });
+
+var jobId3 = "UsageAggregationJob";
+RecurringJob.AddOrUpdate<UsageAggregationJob>(
+    jobId3,
+    job => job.ExecuteAsync(),
+    "0 * * * *", // Run hourly
+    new RecurringJobOptions { TimeZone = TimeZoneInfo.Utc });
+
+var jobId4 = "DunningProcessJob";
+RecurringJob.AddOrUpdate<DunningProcessJob>(
+    jobId4,
+    job => job.ExecuteAsync(),
+    "0 8 * * *", // Run daily at 8 AM
+    new RecurringJobOptions { TimeZone = TimeZoneInfo.Utc });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -184,6 +232,12 @@ app.UseAuthorization();
 
 // Register tenant middleware AFTER authentication
 app.UseMiddleware<TenantMiddleware>();
+
+// Add Hangfire dashboard (protected by authorization)
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = new[] { new HangfireAuthorizationFilter() }
+});
 
 // Add controllers
 app.MapControllers(); // Add this to map controller routes
