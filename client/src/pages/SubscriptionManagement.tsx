@@ -1,10 +1,66 @@
 import Layout from '../components/Layout';
-import { useAppSelector } from '../hooks/useAppSelector';
+import { useEffect, useState } from 'react';
+import { useAppSelector, useAppDispatch } from '../hooks/useAppSelector';
 import type { Subscription, Plan, BillingState } from '../features/billing/billingSlice';
 import type { RootState } from '../store';
+import billingService from '../services/billingService';
+import { setPlans, setSubscriptions, setLoading, setError, addSubscription } from '../features/billing/billingSlice';
 
 const SubscriptionManagement = () => {
+  const dispatch = useAppDispatch();
   const billing = useAppSelector((state: RootState) => state.billing) as BillingState;
+  const [showNewSubscriptionModal, setShowNewSubscriptionModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<string>('');
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        dispatch(setLoading(true));
+        // Load plans
+        const plans = await billingService.getAllPlans();
+        dispatch(setPlans(plans));
+        
+        // Load subscriptions
+        const subscriptions = await billingService.getSubscriptions();
+        dispatch(setSubscriptions(subscriptions));
+        
+        dispatch(setLoading(false));
+      } catch (error) {
+        console.error('Error loading data:', error);
+        dispatch(setError('Failed to load subscriptions and plans'));
+        dispatch(setLoading(false));
+      }
+    };
+
+    loadData();
+  }, [dispatch]);
+
+  const handleNewSubscription = () => {
+    setShowNewSubscriptionModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowNewSubscriptionModal(false);
+    setSelectedPlan('');
+  };
+
+  const handleCreateSubscription = async () => {
+    if (!selectedPlan) return;
+    
+    try {
+      dispatch(setLoading(true));
+      const newSubscription = await billingService.createSubscription({
+        planId: selectedPlan
+      });
+      dispatch(addSubscription(newSubscription));
+      dispatch(setLoading(false));
+      handleCloseModal();
+    } catch (error) {
+      console.error('Error creating subscription:', error);
+      dispatch(setError('Failed to create subscription'));
+      dispatch(setLoading(false));
+    }
+  };
 
   return (
     <Layout>
@@ -12,7 +68,10 @@ const SubscriptionManagement = () => {
         <div className="border-4 border-dashed border-gray-200 rounded-lg h-full p-4">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900">Subscription Management</h1>
-            <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <button 
+              onClick={handleNewSubscription}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
               New Subscription
             </button>
           </div>
@@ -69,7 +128,13 @@ const SubscriptionManagement = () => {
                             <p>Max Storage: {plan.maxStorageGb} GB</p>
                           </div>
                           <div className="mt-4">
-                            <button className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <button 
+                              onClick={() => {
+                                setSelectedPlan(plan.id);
+                                handleNewSubscription();
+                              }}
+                              className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            >
                               Subscribe
                             </button>
                           </div>
@@ -87,6 +152,66 @@ const SubscriptionManagement = () => {
           )}
         </div>
       </div>
+
+      {/* New Subscription Modal */}
+      {showNewSubscriptionModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div className="mt-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-medium text-gray-900">New Subscription</h3>
+                <button 
+                  onClick={handleCloseModal}
+                  className="text-gray-400 hover:text-gray-500"
+                >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="mt-4">
+                <div className="mb-4">
+                  <label htmlFor="plan" className="block text-sm font-medium text-gray-700">
+                    Select Plan
+                  </label>
+                  <select
+                    id="plan"
+                    value={selectedPlan}
+                    onChange={(e) => setSelectedPlan(e.target.value)}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  >
+                    <option value="">Choose a plan</option>
+                    {billing.plans.map((plan: Plan) => (
+                      <option key={plan.id} value={plan.id}>
+                        {plan.name} - ${plan.monthlyPrice}/month
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={handleCloseModal}
+                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleCreateSubscription}
+                    disabled={!selectedPlan}
+                    className={`inline-flex justify-center px-4 py-2 text-sm font-medium text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+                      selectedPlan 
+                        ? 'bg-indigo-600 hover:bg-indigo-700' 
+                        : 'bg-gray-400 cursor-not-allowed'
+                    }`}
+                  >
+                    Create Subscription
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };

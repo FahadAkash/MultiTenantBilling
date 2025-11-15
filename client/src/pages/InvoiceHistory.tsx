@@ -1,11 +1,43 @@
 import Layout from '../components/Layout';
-import { useAppSelector } from '../hooks/useAppSelector';
+import { useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '../hooks/useAppSelector';
 import type { Invoice, Payment } from '../features/billing/billingSlice';
 import type { RootState } from '../store';
 import type { BillingState } from '../features/billing/billingSlice';
+import billingService from '../services/billingService';
+import { setInvoices, setPayments, setLoading, setError } from '../features/billing/billingSlice';
 
 const InvoiceHistory = () => {
+  const dispatch = useAppDispatch();
   const billing = useAppSelector((state: RootState) => state.billing) as BillingState;
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        dispatch(setLoading(true));
+        // Load invoices
+        const invoices = await billingService.getInvoices();
+        dispatch(setInvoices(invoices));
+        
+        // Load payments
+        const payments = await billingService.getPayments();
+        dispatch(setPayments(payments));
+        
+        dispatch(setLoading(false));
+      } catch (error) {
+        console.error('Error loading data:', error);
+        dispatch(setError('Failed to load invoices and payments'));
+        dispatch(setLoading(false));
+      }
+    };
+
+    loadData();
+  }, [dispatch]);
+
+  const handleGenerateInvoice = () => {
+    // TODO: Implement generate invoice functionality
+    console.log('Generate invoice button clicked');
+  };
 
   return (
     <Layout>
@@ -13,7 +45,10 @@ const InvoiceHistory = () => {
         <div className="border-4 border-dashed border-gray-200 rounded-lg h-full p-4">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900">Invoice History</h1>
-            <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <button 
+              onClick={handleGenerateInvoice}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
               Generate Invoice
             </button>
           </div>

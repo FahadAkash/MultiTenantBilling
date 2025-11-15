@@ -1,14 +1,36 @@
 import Layout from '../components/Layout';
-import { useState } from 'react';
-import { useAppSelector } from '../hooks/useAppSelector';
+import { useState, useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '../hooks/useAppSelector';
 import type { Invoice } from '../features/billing/billingSlice';
 import type { RootState } from '../store';
 import type { BillingState } from '../features/billing/billingSlice';
+import billingService from '../services/billingService';
+import { setInvoices, setLoading, setError } from '../features/billing/billingSlice';
 
 const PaymentProcessing = () => {
+  const dispatch = useAppDispatch();
   const billing = useAppSelector((state: RootState) => state.billing) as BillingState;
   const [selectedInvoice, setSelectedInvoice] = useState<string>('');
   const [paymentMethod, setPaymentMethod] = useState<string>('');
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        dispatch(setLoading(true));
+        // Load invoices
+        const invoices = await billingService.getInvoices();
+        dispatch(setInvoices(invoices));
+        
+        dispatch(setLoading(false));
+      } catch (error) {
+        console.error('Error loading data:', error);
+        dispatch(setError('Failed to load invoices'));
+        dispatch(setLoading(false));
+      }
+    };
+
+    loadData();
+  }, [dispatch]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
