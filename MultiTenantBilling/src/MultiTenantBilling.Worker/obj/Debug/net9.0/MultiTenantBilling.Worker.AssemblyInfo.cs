@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MultiTenantBilling.Worker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0bf3cc30868651d84bd4d0a6fa590476c63e179f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a3b3da0fcf4045eb5a973f57de9fb02cb941bc08")]
 [assembly: System.Reflection.AssemblyProductAttribute("MultiTenantBilling.Worker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MultiTenantBilling.Worker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

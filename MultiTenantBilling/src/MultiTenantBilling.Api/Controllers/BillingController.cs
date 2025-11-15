@@ -5,6 +5,9 @@ using MultiTenantBilling.Api.Services;
 using MultiTenantBilling.Application.Commands;
 using MultiTenantBilling.Application.DTOs;
 using MultiTenantBilling.Application.Queries;
+using MultiTenantBilling.Domain.Entities;
+using MultiTenantBilling.Infrastructure.Repositories;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -159,6 +162,34 @@ namespace MultiTenantBilling.Api.Controllers
                 TenantId = tenantId
             });
             return Ok(invoices);
+        }
+        
+        /// <summary>
+        /// Gets all invoices for the tenant.
+        /// </summary>
+        /// <returns>A list of all invoices.</returns>
+        /// <response code="200">Returns the list of invoices.</response>
+        [HttpGet("invoices")]
+        [ProducesResponseType(typeof(IEnumerable<InvoiceDto>), 200)]
+        public async Task<ActionResult<IEnumerable<InvoiceDto>>> GetAllInvoices([FromServices] ITenantRepository<Invoice> invoiceRepository)
+        {
+            var tenantId = _tenantService.GetRequiredTenantId();
+            var invoices = await invoiceRepository.GetByTenantIdAsync(tenantId);
+            
+            var invoiceDtos = invoices.Select(invoice => new InvoiceDto
+            {
+                Id = invoice.Id,
+                TenantId = invoice.TenantId,
+                SubscriptionId = invoice.SubscriptionId,
+                Amount = invoice.Amount,
+                InvoiceDate = invoice.InvoiceDate,
+                DueDate = invoice.DueDate,
+                Status = invoice.Status,
+                IsPaid = invoice.IsPaid,
+                Description = invoice.Description
+            }).ToList();
+            
+            return Ok(invoiceDtos);
         }
     }
 

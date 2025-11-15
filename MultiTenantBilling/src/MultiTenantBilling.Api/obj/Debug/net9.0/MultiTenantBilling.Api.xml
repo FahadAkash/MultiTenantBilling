@@ -302,6 +302,13 @@
             <returns>A list of invoices for the subscription.</returns>
             <response code="200">Returns the list of invoices.</response>
         </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.GetAllInvoices(MultiTenantBilling.Infrastructure.Repositories.ITenantRepository{MultiTenantBilling.Domain.Entities.Invoice})">
+            <summary>
+            Gets all invoices for the tenant.
+            </summary>
+            <returns>A list of all invoices.</returns>
+            <response code="200">Returns the list of invoices.</response>
+        </member>
         <member name="T:MultiTenantBilling.Api.Controllers.CreateSubscriptionRequest">
             <summary>
             DTO for creating a subscription.
