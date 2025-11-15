@@ -50,6 +50,66 @@
             <returns>True if successful.</returns>
             <response code="200">Returns true if successful.</response>
         </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AdminController.GetAllTenants(MultiTenantBilling.Infrastructure.Repositories.ITenantRepository{MultiTenantBilling.Domain.Entities.Tenant})">
+            <summary>
+            Gets all tenants in the system.
+            </summary>
+            <returns>A list of all tenants.</returns>
+            <response code="200">Returns the list of tenants.</response>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AdminController.CreatePlanForTenant(System.Guid,MultiTenantBilling.Api.Controllers.CreatePlanRequest,MultiTenantBilling.Infrastructure.Repositories.ITenantRepository{MultiTenantBilling.Domain.Entities.Plan},MultiTenantBilling.Application.Services.ITenantService)">
+            <summary>
+            Creates a new plan for a specific tenant.
+            </summary>
+            <param name="tenantId">The ID of the tenant to create the plan for.</param>
+            <param name="request">The plan details.</param>
+            <returns>The created plan.</returns>
+            <response code="200">Returns the created plan.</response>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AdminController.AdminRegister(MultiTenantBilling.Application.DTOs.AdminRegisterDto,MultiTenantBilling.Application.Services.IAuthService)">
+            <summary>
+            Registers a new user for a specific tenant with assigned roles.
+            </summary>
+            <param name="request">The user registration details.</param>
+            <returns>The authentication response with a JWT token.</returns>
+            <response code="200">Returns the authentication response.</response>
+            <response code="400">If the user already exists or validation fails.</response>
+        </member>
+        <member name="T:MultiTenantBilling.Api.Controllers.TenantDto">
+            <summary>
+            DTO for tenant information.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.TenantDto.Id">
+            <summary>
+            The ID of the tenant.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.TenantDto.TenantId">
+            <summary>
+            The tenant ID.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.TenantDto.Name">
+            <summary>
+            The name of the tenant.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.TenantDto.Subdomain">
+            <summary>
+            The subdomain of the tenant.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.TenantDto.Email">
+            <summary>
+            The email of the tenant.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.TenantDto.Status">
+            <summary>
+            The status of the tenant.
+            </summary>
+        </member>
         <member name="T:MultiTenantBilling.Api.Controllers.CreatePlanRequest">
             <summary>
             DTO for creating a plan.

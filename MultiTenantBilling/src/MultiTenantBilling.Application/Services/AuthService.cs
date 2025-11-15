@@ -3,6 +3,7 @@ using MultiTenantBilling.Application.DTOs;
 using MultiTenantBilling.Domain.Entities;
 using MultiTenantBilling.Infrastructure.Repositories;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MultiTenantBilling.Application.Services
@@ -115,6 +116,100 @@ namespace MultiTenantBilling.Application.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error registering user {Email}", registerDto.Email);
+                throw;
+            }
+        }
+
+        public async Task<AuthResponseDto> AdminRegisterAsync(AdminRegisterDto adminRegisterDto)
+        {
+            _logger.LogInformation("Admin registering new user: {Email} for tenant {TenantId}", adminRegisterDto.Email, adminRegisterDto.TenantId);
+
+            try
+            {
+                // Set the tenant ID in the tenant service for the current request context
+                _tenantService.SetTenantId(adminRegisterDto.TenantId);
+
+                // Check if user already exists
+                var existingUser = await GetUserByEmailAsync(adminRegisterDto.Email);
+                if (existingUser != null)
+                {
+                    _logger.LogWarning("User with email {Email} already exists", adminRegisterDto.Email);
+                    throw new InvalidOperationException("User with this email already exists");
+                }
+
+                // Create new user
+                var user = new User
+                {
+                    TenantId = adminRegisterDto.TenantId,
+                    Email = adminRegisterDto.Email,
+                    PasswordHash = HashPassword(adminRegisterDto.Password), // In a real implementation, use a proper password hashing library
+                    FirstName = adminRegisterDto.FirstName,
+                    LastName = adminRegisterDto.LastName,
+                    IsActive = true
+                };
+
+                var createdUser = await _userRepository.AddAsync(user);
+                _logger.LogInformation("Created user {UserId} for tenant {TenantId}", createdUser.Id, adminRegisterDto.TenantId);
+
+                // Assign roles specified by admin
+                foreach (var roleName in adminRegisterDto.Roles)
+                {
+                    var role = await GetRoleByNameAsync(roleName);
+                    if (role != null)
+                    {
+                        var userRole = new UserRole
+                        {
+                            TenantId = adminRegisterDto.TenantId,
+                            UserId = createdUser.Id,
+                            RoleId = role.Id
+                        };
+                        await _userRoleRepository.AddAsync(userRole);
+                        _logger.LogInformation("Assigned {RoleName} role to user {UserId}", roleName, createdUser.Id);
+                    }
+                }
+
+                // If no roles were specified, assign default "User" role
+                if (!adminRegisterDto.Roles.Any())
+                {
+                    var defaultRole = await GetRoleByNameAsync("User");
+                    if (defaultRole != null)
+                    {
+                        var userRole = new UserRole
+                        {
+                            TenantId = adminRegisterDto.TenantId,
+                            UserId = createdUser.Id,
+                            RoleId = defaultRole.Id
+                        };
+                        await _userRoleRepository.AddAsync(userRole);
+                        _logger.LogInformation("Assigned default User role to user {UserId}", createdUser.Id);
+                    }
+                }
+
+                var userRoles = await GetUserRolesAsyncForTenant(createdUser.Id, adminRegisterDto.TenantId);
+
+                var userDto = new UserDto
+                {
+                    Id = createdUser.Id,
+                    Email = createdUser.Email,
+                    FirstName = createdUser.FirstName,
+                    LastName = createdUser.LastName,
+                    IsActive = createdUser.IsActive,
+                    Roles = userRoles
+                };
+
+                var token = _jwtService.GenerateToken(userDto, adminRegisterDto.TenantId);
+                _logger.LogInformation("Generated JWT token for user {UserId} in tenant {TenantId}", createdUser.Id, adminRegisterDto.TenantId);
+
+                return new AuthResponseDto
+                {
+                    Token = token,
+                    ExpiresAt = DateTime.UtcNow.AddHours(1),
+                    User = userDto
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error registering user {Email}", adminRegisterDto.Email);
                 throw;
             }
         }

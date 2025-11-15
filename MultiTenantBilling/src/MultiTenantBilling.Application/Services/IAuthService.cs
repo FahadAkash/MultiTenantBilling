@@ -1,4 +1,6 @@
 using MultiTenantBilling.Application.DTOs;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MultiTenantBilling.Application.Services
@@ -13,5 +15,6 @@ namespace MultiTenantBilling.Application.Services
         Task<IEnumerable<UserDto>> GetAllUsersAsync();
         Task<bool> ActivateUserAsync(Guid userId);
         Task<bool> DeactivateUserAsync(Guid userId);
+        Task<AuthResponseDto> AdminRegisterAsync(AdminRegisterDto adminRegisterDto);
     }
 }

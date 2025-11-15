@@ -7,8 +7,11 @@ using MultiTenantBilling.Application.Commands;
 using MultiTenantBilling.Application.DTOs;
 using MultiTenantBilling.Application.Queries;
 using MultiTenantBilling.Application.Services;
+using MultiTenantBilling.Domain.Entities;
+using MultiTenantBilling.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -169,6 +172,149 @@ namespace MultiTenantBilling.Api.Controllers
             var result = await authService.DeactivateUserAsync(userId);
             return Ok(result);
         }
+
+        /// <summary>
+        /// Gets all tenants in the system.
+        /// </summary>
+        /// <returns>A list of all tenants.</returns>
+        /// <response code="200">Returns the list of tenants.</response>
+        [HttpGet("tenants")]
+        [Authorize(Roles = "Admin")] // Require Admin role
+        [ProducesResponseType(typeof(IEnumerable<TenantDto>), 200)]
+        public async Task<ActionResult<IEnumerable<TenantDto>>> GetAllTenants([FromServices] ITenantRepository<Tenant> tenantRepository)
+        {
+            var tenants = await tenantRepository.GetAllEntitiesAsync();
+            var tenantDtos = tenants.Select(tenant => new TenantDto
+            {
+                Id = tenant.Id,
+                TenantId = tenant.TenantId,
+                Name = tenant.Name,
+                Subdomain = tenant.Subdomain,
+                Email = tenant.Email,
+                Status = tenant.Status
+            }).ToList();
+            
+            return Ok(tenantDtos);
+        }
+
+        /// <summary>
+        /// Creates a new plan for a specific tenant.
+        /// </summary>
+        /// <param name="tenantId">The ID of the tenant to create the plan for.</param>
+        /// <param name="request">The plan details.</param>
+        /// <returns>The created plan.</returns>
+        /// <response code="200">Returns the created plan.</response>
+        [HttpPost("tenants/{tenantId}/plans")]
+        [Authorize(Roles = "Admin")] // Require Admin role
+        [ProducesResponseType(typeof(PlanDto), 200)]
+        public async Task<ActionResult<PlanDto>> CreatePlanForTenant(Guid tenantId, [FromBody] CreatePlanRequest request, 
+            [FromServices] ITenantRepository<Plan> planRepository, 
+            [FromServices] ITenantService tenantService)
+        {
+            // Temporarily set the tenant ID for this operation
+            var originalTenantId = tenantService.GetTenantId();
+            tenantService.SetTenantId(tenantId);
+            
+            try
+            {
+                var plan = new Plan
+                {
+                    TenantId = tenantId,
+                    Name = request.Name,
+                    Description = request.Description,
+                    MonthlyPrice = request.MonthlyPrice,
+                    MaxUsers = request.MaxUsers,
+                    MaxStorageGb = request.MaxStorageGb,
+                    IsActive = request.IsActive
+                };
+                
+                var createdPlan = await planRepository.AddAsync(plan);
+                
+                var planDto = new PlanDto
+                {
+                    Id = createdPlan.Id,
+                    Name = createdPlan.Name,
+                    Description = createdPlan.Description,
+                    MonthlyPrice = createdPlan.MonthlyPrice,
+                    MaxUsers = createdPlan.MaxUsers,
+                    MaxStorageGb = createdPlan.MaxStorageGb
+                };
+                
+                return Ok(planDto);
+            }
+            finally
+            {
+                // Restore the original tenant ID
+                if (originalTenantId.HasValue)
+                    tenantService.SetTenantId(originalTenantId.Value);
+                else
+                    // Clear tenant ID if it wasn't set originally
+                    // This would require a way to clear the tenant ID, which isn't currently implemented
+                    // For now, we'll just leave it as is
+                    tenantService.SetTenantId(tenantId);
+            }
+        }
+        
+        /// <summary>
+        /// Registers a new user for a specific tenant with assigned roles.
+        /// </summary>
+        /// <param name="request">The user registration details.</param>
+        /// <returns>The authentication response with a JWT token.</returns>
+        /// <response code="200">Returns the authentication response.</response>
+        /// <response code="400">If the user already exists or validation fails.</response>
+        [HttpPost("register")]
+        [Authorize(Roles = "Admin")] // Require Admin role
+        [ProducesResponseType(typeof(AuthResponseDto), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        public async Task<ActionResult<AuthResponseDto>> AdminRegister([FromBody] AdminRegisterDto request, 
+            [FromServices] IAuthService authService)
+        {
+            try
+            {
+                var result = await authService.AdminRegisterAsync(request);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
+    }
+
+    /// <summary>
+    /// DTO for tenant information.
+    /// </summary>
+    public class TenantDto
+    {
+        /// <summary>
+        /// The ID of the tenant.
+        /// </summary>
+        public Guid Id { get; set; }
+        
+        /// <summary>
+        /// The tenant ID.
+        /// </summary>
+        public Guid TenantId { get; set; }
+        
+        /// <summary>
+        /// The name of the tenant.
+        /// </summary>
+        public string Name { get; set; } = default!;
+        
+        /// <summary>
+        /// The subdomain of the tenant.
+        /// </summary>
+        public string Subdomain { get; set; } = default!;
+        
+        /// <summary>
+        /// The email of the tenant.
+        /// </summary>
+        public string Email { get; set; } = default!;
+        
+        /// <summary>
+        /// The status of the tenant.
+        /// </summary>
+        public string Status { get; set; } = default!;
     }
 
     /// <summary>
