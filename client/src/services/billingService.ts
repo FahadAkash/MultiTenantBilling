@@ -165,7 +165,10 @@ class BillingService {
       paymentDate: response.data.paymentDate.toString(),
       method: response.data.method,
       status: response.data.status,
-      transactionId: response.data.transactionId
+      transactionId: response.data.transactionId,
+      isRetry: response.data.isRetry,
+      retryAttempt: response.data.retryAttempt,
+      failureReason: response.data.failureReason
     };
   }
 
@@ -178,7 +181,10 @@ class BillingService {
       paymentDate: payment.paymentDate.toString(),
       method: payment.method,
       status: payment.status,
-      transactionId: payment.transactionId
+      transactionId: payment.transactionId,
+      isRetry: payment.isRetry,
+      retryAttempt: payment.retryAttempt,
+      failureReason: payment.failureReason
     }));
   }
 

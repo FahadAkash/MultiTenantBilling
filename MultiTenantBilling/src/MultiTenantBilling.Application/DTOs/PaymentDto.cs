@@ -11,5 +11,8 @@ namespace MultiTenantBilling.Application.DTOs
         public string Method { get; set; } = default!;
         public string Status { get; set; } = default!;
         public string? TransactionId { get; set; }
+        public bool IsRetry { get; set; }
+        public int RetryAttempt { get; set; }
+        public string? FailureReason { get; set; }
     }
 }

@@ -12,7 +12,10 @@ namespace MultiTenantBilling.Domain.Entities
         public decimal Amount { get; set; }
         public DateTime PaymentDate { get; set; } = DateTime.UtcNow;
         public string Method { get; set; } = "Stripe"; // Stripe, Bank, Manual
-        public string Status { get; set; } = "Success"; // Success, Failed
+        public string Status { get; set; } = "Success"; // Success, Failed, Pending
         public string? TransactionId { get; set; }
+        public bool IsRetry { get; set; } = false;
+        public int RetryAttempt { get; set; } = 0;
+        public string? FailureReason { get; set; }
     }
 }

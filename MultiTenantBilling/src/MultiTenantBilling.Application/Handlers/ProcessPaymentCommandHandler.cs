@@ -58,7 +58,10 @@ namespace MultiTenantBilling.Application.Handlers
                 PaymentDate = DateTime.UtcNow,
                 Method = request.PaymentMethodId,
                 Status = paymentSucceeded ? "Success" : "Failed",
-                TransactionId = Guid.NewGuid().ToString()
+                TransactionId = Guid.NewGuid().ToString(),
+                IsRetry = request.IsRetry,
+                RetryAttempt = request.RetryAttempt,
+                FailureReason = paymentSucceeded ? null : "Payment processing failed"
             };
 
             var createdPayment = await _paymentRepository.AddAsync(payment);

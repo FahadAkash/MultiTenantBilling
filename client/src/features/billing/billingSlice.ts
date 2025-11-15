@@ -40,6 +40,9 @@ export interface Payment {
   method: string;
   status: string;
   transactionId: string | null;
+  isRetry: boolean;
+  retryAttempt: number;
+  failureReason: string | null;
 }
 
 // DTOs that match the backend
@@ -84,6 +87,9 @@ export interface PaymentDto {
   method: string;
   status: string;
   transactionId: string | null;
+  isRetry: boolean;
+  retryAttempt: number;
+  failureReason: string | null;
 }
 
 export interface BillingState {
