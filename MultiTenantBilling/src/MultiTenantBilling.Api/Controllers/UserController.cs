@@ -25,7 +25,7 @@ namespace MultiTenantBilling.Api.Controllers
         }
 
         [HttpGet("me")]
-        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        public ActionResult<UserDto> GetCurrentUser()
         {
             // Get the user email from the JWT token
             var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;

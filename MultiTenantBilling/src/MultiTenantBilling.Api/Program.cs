@@ -22,6 +22,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers(); // Add this to register controllers
 
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000", "http://localhost:3001", "http://localhost:3002")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 // Add Redis caching
 builder.Services.AddStackExchangeRedisCache(options =>
 {
@@ -179,35 +191,6 @@ builder.Services.AddScoped<PaymentRetryJob>();
 builder.Services.AddScoped<UsageAggregationJob>();
 builder.Services.AddScoped<DunningProcessJob>();
 
-// Schedule background jobs
-var jobId1 = "InvoiceGenerationJob";
-RecurringJob.AddOrUpdate<InvoiceGenerationJob>(
-    jobId1,
-    job => job.ExecuteAsync(),
-    "0 2 * * *", // Run daily at 2 AM
-    new RecurringJobOptions { TimeZone = TimeZoneInfo.Utc });
-
-var jobId2 = "PaymentRetryJob";
-RecurringJob.AddOrUpdate<PaymentRetryJob>(
-    jobId2,
-    job => job.ExecuteAsync(),
-    "*/15 * * * *", // Run every 15 minutes
-    new RecurringJobOptions { TimeZone = TimeZoneInfo.Utc });
-
-var jobId3 = "UsageAggregationJob";
-RecurringJob.AddOrUpdate<UsageAggregationJob>(
-    jobId3,
-    job => job.ExecuteAsync(),
-    "0 * * * *", // Run hourly
-    new RecurringJobOptions { TimeZone = TimeZoneInfo.Utc });
-
-var jobId4 = "DunningProcessJob";
-RecurringJob.AddOrUpdate<DunningProcessJob>(
-    jobId4,
-    job => job.ExecuteAsync(),
-    "0 8 * * *", // Run daily at 8 AM
-    new RecurringJobOptions { TimeZone = TimeZoneInfo.Utc });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -226,6 +209,9 @@ app.MapScalarApiReference(options =>
 
 app.UseHttpsRedirection();
 
+// Add CORS middleware
+app.UseCors("AllowFrontend");
+
 // Add authentication and authorization middleware FIRST
 app.UseAuthentication();
 app.UseAuthorization();
@@ -238,6 +224,36 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
     Authorization = new[] { new HangfireAuthorizationFilter() }
 });
+
+// Schedule background jobs after the app is built
+using (var scope = app.Services.CreateScope())
+{
+    var recurringJobManager = scope.ServiceProvider.GetRequiredService<Hangfire.IRecurringJobManager>();
+    
+    recurringJobManager.AddOrUpdate<InvoiceGenerationJob>(
+        "InvoiceGenerationJob",
+        job => job.ExecuteAsync(),
+        "0 2 * * *", // Run daily at 2 AM
+        new RecurringJobOptions { TimeZone = TimeZoneInfo.Utc });
+
+    recurringJobManager.AddOrUpdate<PaymentRetryJob>(
+        "PaymentRetryJob",
+        job => job.ExecuteAsync(),
+        "*/15 * * * *", // Run every 15 minutes
+        new RecurringJobOptions { TimeZone = TimeZoneInfo.Utc });
+
+    recurringJobManager.AddOrUpdate<UsageAggregationJob>(
+        "UsageAggregationJob",
+        job => job.ExecuteAsync(),
+        "0 * * * *", // Run hourly
+        new RecurringJobOptions { TimeZone = TimeZoneInfo.Utc });
+
+    recurringJobManager.AddOrUpdate<DunningProcessJob>(
+        "DunningProcessJob",
+        job => job.ExecuteAsync(),
+        "0 8 * * *", // Run daily at 8 AM
+        new RecurringJobOptions { TimeZone = TimeZoneInfo.Utc });
+}
 
 // Add controllers
 app.MapControllers(); // Add this to map controller routes

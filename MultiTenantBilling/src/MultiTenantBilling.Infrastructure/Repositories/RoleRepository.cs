@@ -14,13 +14,13 @@ namespace MultiTenantBilling.Infrastructure.Repositories
         {
         }
 
-        public new async Task<Role> GetByIdAsync(Guid id)
+        public new Task<Role> GetByIdAsync(Guid id)
         {
             // This method should not be used directly without tenant context
             throw new NotImplementedException("Use GetByIdForTenantAsync with tenant ID");
         }
 
-        public new async Task<IEnumerable<Role>> GetAllAsync()
+        public new Task<IEnumerable<Role>> GetAllAsync()
         {
             // This method should not be used directly without tenant context
             throw new NotImplementedException("Use GetAllForTenantAsync with tenant ID");

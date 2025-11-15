@@ -18,7 +18,7 @@ namespace MultiTenantBilling.Infrastructure.Repositories
             _context = context;
         }
 
-        public virtual async Task<T> GetByIdAsync(Guid id)
+        public virtual Task<T> GetByIdAsync(Guid id)
         {
             // This method should be implemented by concrete classes to ensure tenant filtering
             throw new NotImplementedException("Use GetByIdForTenantAsync instead or implement tenant filtering in concrete class");
@@ -30,7 +30,7 @@ namespace MultiTenantBilling.Infrastructure.Repositories
                 .FirstOrDefaultAsync(e => e.Id == id && e.TenantId == tenantId);
         }
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync()
+        public virtual Task<IEnumerable<T>> GetAllAsync()
         {
             // This method should be implemented by concrete classes to ensure tenant filtering
             throw new NotImplementedException("Use GetAllForTenantAsync instead or implement tenant filtering in concrete class");

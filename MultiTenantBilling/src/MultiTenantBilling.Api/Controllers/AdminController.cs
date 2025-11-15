@@ -94,7 +94,7 @@ namespace MultiTenantBilling.Api.Controllers
         [HttpGet("plans/{planId}")]
         [Authorize(Roles = "Admin")] // Require Admin role
         [ProducesResponseType(typeof(PlanDto), 200)]
-        public async Task<ActionResult<PlanDto>> GetPlan(Guid planId)
+        public ActionResult<PlanDto> GetPlan(Guid planId)
         {
             var tenantId = _tenantService.GetRequiredTenantId();
             // In a real implementation, you would use a query handler to get the plan
