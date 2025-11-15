@@ -10,6 +10,7 @@ namespace MultiTenantBilling.Application.DTOs
         public string FirstName { get; set; } = default!;
         public string LastName { get; set; } = default!;
         public bool IsActive { get; set; }
+        public Guid TenantId { get; set; }
         public IEnumerable<string> Roles { get; set; } = new List<string>();
     }
 }

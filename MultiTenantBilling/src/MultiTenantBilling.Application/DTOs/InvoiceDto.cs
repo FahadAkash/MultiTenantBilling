@@ -13,6 +13,7 @@ namespace MultiTenantBilling.Application.DTOs
         public DateTime DueDate { get; set; }
         public string Status { get; set; } = default!;
         public bool IsPaid { get; set; }
+        public string? Description { get; set; }
         public IEnumerable<PaymentDto>? Payments { get; set; }
     }
 }

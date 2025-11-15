@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MultiTenantBilling.UnitTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+631c58e0779fab0e2d873c52f3dd9f2418c669fd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0bf3cc30868651d84bd4d0a6fa590476c63e179f")]
 [assembly: System.Reflection.AssemblyProductAttribute("MultiTenantBilling.UnitTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MultiTenantBilling.UnitTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

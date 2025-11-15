@@ -7,6 +7,7 @@ export interface User {
   lastName: string;
   isActive: boolean;
   roles: string[];
+  tenantId: string; // Add tenantId property
 }
 
 export interface Tenant {
@@ -28,6 +29,15 @@ export interface Plan {
   isActive: boolean;
 }
 
+export interface Subscription {
+  id: string;
+  tenantId: string;
+  planId: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+}
+
 export interface CreatePlanRequest {
   name: string;
   description: string;
@@ -44,6 +54,12 @@ export interface AdminRegisterRequest {
   lastName: string;
   tenantId: string;
   roles: string[];
+}
+
+export interface GenerateInvoiceRequest {
+  tenantId: string;
+  description: string;
+  amount: number;
 }
 
 class AdminService {
@@ -67,6 +83,11 @@ class AdminService {
     return response.data;
   }
 
+  async getSubscriptionsForTenant(tenantId: string): Promise<Subscription[]> {
+    const response = await api.get<Subscription[]>(`/api/admin/tenants/${tenantId}/subscriptions`);
+    return response.data;
+  }
+
   async createPlanForTenant(tenantId: string, planData: CreatePlanRequest): Promise<Plan> {
     const response = await api.post<Plan>(`/api/admin/tenants/${tenantId}/plans`, planData);
     return response.data;
@@ -74,6 +95,11 @@ class AdminService {
 
   async adminRegister(userData: AdminRegisterRequest): Promise<any> {
     const response = await api.post<any>('/api/admin/register', userData);
+    return response.data;
+  }
+  
+  async generateManualInvoice(invoiceData: GenerateInvoiceRequest): Promise<any> {
+    const response = await api.post<any>('/api/admin/invoices', invoiceData);
     return response.data;
   }
 }

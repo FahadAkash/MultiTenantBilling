@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '../store';
 import type { AuthState } from '../features/auth/authSlice';
 import adminService from '../services/adminService';
+import billingService from '../services/billingService';
 
 interface User {
   id: string;
@@ -12,6 +13,7 @@ interface User {
   lastName: string;
   isActive: boolean;
   roles: string[];
+  tenantId: string; // Add tenantId property
 }
 
 interface Tenant {
@@ -33,10 +35,21 @@ interface Plan {
   isActive: boolean;
 }
 
+interface Subscription {
+  id: string;
+  tenantId: string;
+  planId: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+}
+
 const AdminDashboard = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [showCreatePlanForm, setShowCreatePlanForm] = useState(false);
   const [newPlan, setNewPlan] = useState({
     name: '',
@@ -54,6 +67,12 @@ const AdminDashboard = () => {
     lastName: '',
     tenantId: '',
     roles: [] as string[]
+  });
+  const [showGenerateInvoiceForm, setShowGenerateInvoiceForm] = useState(false);
+  const [newInvoice, setNewInvoice] = useState({
+    tenantId: '',
+    description: '',
+    amount: 0
   });
   const [availableRoles] = useState(['User', 'Admin']);
   const [loading, setLoading] = useState(true);
@@ -89,6 +108,16 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchSubscriptionsForTenant = async (tenantId: string) => {
+    try {
+      const subs = await adminService.getSubscriptionsForTenant(tenantId);
+      setSubscriptions(subs);
+    } catch (err) {
+      setError('Failed to fetch subscriptions');
+      console.error('Error fetching subscriptions:', err);
+    }
+  };
+
   const activateUser = async (userId: string) => {
     try {
       await adminService.activateUser(userId);
@@ -109,8 +138,21 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleTenantSelect = (tenant: Tenant) => {
+  const handleTenantSelect = async (tenant: Tenant) => {
     setSelectedTenant(tenant);
+    setSelectedUser(null);
+    setSubscriptions([]);
+    await fetchSubscriptionsForTenant(tenant.id);
+  };
+
+  const handleUserSelect = (user: User) => {
+    setSelectedUser(user);
+    // Find the tenant for this user
+    const userTenant = tenants.find(t => t.id === user.tenantId);
+    if (userTenant) {
+      setSelectedTenant(userTenant);
+      fetchSubscriptionsForTenant(userTenant.id);
+    }
   };
 
   const handleCreatePlan = async () => {
@@ -164,6 +206,22 @@ const AdminDashboard = () => {
         : [...prev.roles, role];
       return { ...prev, roles };
     });
+  };
+
+  const handleGenerateInvoice = async () => {
+    try {
+      await adminService.generateManualInvoice(newInvoice);
+      setShowGenerateInvoiceForm(false);
+      setNewInvoice({
+        tenantId: '',
+        description: '',
+        amount: 0
+      });
+      setError(null);
+    } catch (err) {
+      setError('Failed to generate invoice');
+      console.error('Error generating invoice:', err);
+    }
   };
 
   if (!auth.user?.roles.includes('Admin')) {
@@ -260,7 +318,109 @@ const AdminDashboard = () => {
                 >
                   Create New User
                 </button>
+                <button
+                  onClick={() => setShowGenerateInvoiceForm(true)}
+                  className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                >
+                  Generate Invoice
+                </button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* User Selection Section */}
+        <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
+          <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+            <h2 className="text-lg leading-6 font-medium text-gray-900">User Management</h2>
+            <p className="mt-1 max-w-2xl text-sm text-gray-500">Select a user to manage their subscriptions</p>
+          </div>
+          <div className="px-4 py-5 sm:px-6">
+            <div className="grid grid-cols-1 gap-6">
+              <div>
+                <label htmlFor="user-select" className="block text-sm font-medium text-gray-700 mb-2">
+                  Select User
+                </label>
+                <select
+                  id="user-select"
+                  value={selectedUser?.id || ''}
+                  onChange={(e) => {
+                    const user = users.find(u => u.id === e.target.value);
+                    if (user) handleUserSelect(user);
+                  }}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                >
+                  <option value="">Choose a user</option>
+                  {users.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.firstName} {user.lastName} ({user.email})
+                    </option>
+                  ))}
+                </select>
+                {selectedUser && (
+                  <div className="mt-4 p-4 bg-gray-50 rounded-md">
+                    <h3 className="text-md font-medium text-gray-900">Selected User</h3>
+                    <p className="text-sm text-gray-500">Name: {selectedUser.firstName} {selectedUser.lastName}</p>
+                    <p className="text-sm text-gray-500">Email: {selectedUser.email}</p>
+                    <p className="text-sm text-gray-500">Status: {selectedUser.isActive ? 'Active' : 'Inactive'}</p>
+                    <p className="text-sm text-gray-500">Roles: {selectedUser.roles.join(', ') || 'No roles assigned'}</p>
+                  </div>
+                )}
+              </div>
+              
+              {/* Subscriptions for selected user */}
+              {selectedUser && subscriptions.length > 0 && (
+                <div className="mt-4">
+                  <h3 className="text-md font-medium text-gray-900 mb-2">Active Subscriptions</h3>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Plan
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Start Date
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            End Date
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {subscriptions
+                          .filter(sub => sub.status === 'Active')
+                          .map((subscription) => (
+                            <tr key={subscription.id}>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {/* We would need to fetch plan details to show the plan name */}
+                                Plan ID: {subscription.planId}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {new Date(subscription.startDate).toLocaleDateString()}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {new Date(subscription.endDate).toLocaleDateString()}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                  subscription.status === 'Active' 
+                                    ? 'bg-green-100 text-green-800' 
+                                    : 'bg-yellow-100 text-yellow-800'
+                                }`}>
+                                  {subscription.status}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -495,6 +655,92 @@ const AdminDashboard = () => {
                       className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                     >
                       Create User
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Generate Invoice Form Modal */}
+        {showGenerateInvoiceForm && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+              <div className="mt-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-medium text-gray-900">Generate Manual Invoice</h3>
+                  <button 
+                    onClick={() => setShowGenerateInvoiceForm(false)}
+                    className="text-gray-400 hover:text-gray-500"
+                  >
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="mt-4">
+                  <div className="space-y-4">
+                    <div>
+                      <label htmlFor="invoice-tenant" className="block text-sm font-medium text-gray-700">
+                        Tenant
+                      </label>
+                      <select
+                        id="invoice-tenant"
+                        value={newInvoice.tenantId}
+                        onChange={(e) => setNewInvoice({...newInvoice, tenantId: e.target.value})}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      >
+                        <option value="">Select a tenant</option>
+                        {tenants.map((tenant) => (
+                          <option key={tenant.id} value={tenant.id}>
+                            {tenant.name} ({tenant.subdomain})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="invoice-description" className="block text-sm font-medium text-gray-700">
+                        Description
+                      </label>
+                      <input
+                        type="text"
+                        id="invoice-description"
+                        value={newInvoice.description}
+                        onChange={(e) => setNewInvoice({...newInvoice, description: e.target.value})}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="invoice-amount" className="block text-sm font-medium text-gray-700">
+                        Amount ($)
+                      </label>
+                      <input
+                        type="number"
+                        id="invoice-amount"
+                        value={newInvoice.amount}
+                        onChange={(e) => setNewInvoice({...newInvoice, amount: parseFloat(e.target.value) || 0})}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-6 flex justify-end space-x-3">
+                    <button
+                      onClick={() => setShowGenerateInvoiceForm(false)}
+                      className="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleGenerateInvoice}
+                      disabled={!newInvoice.tenantId || newInvoice.amount <= 0}
+                      className={`inline-flex justify-center px-4 py-2 text-sm font-medium text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+                        newInvoice.tenantId && newInvoice.amount > 0
+                          ? 'bg-purple-600 hover:bg-purple-700 border border-transparent'
+                          : 'bg-gray-400 cursor-not-allowed'
+                      }`}
+                    >
+                      Generate Invoice
                     </button>
                   </div>
                 </div>

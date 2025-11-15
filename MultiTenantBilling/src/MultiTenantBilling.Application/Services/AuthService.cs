@@ -473,6 +473,7 @@ namespace MultiTenantBilling.Application.Services
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 IsActive = user.IsActive,
+                TenantId = user.TenantId,
                 Roles = new string[0] // We'll populate roles separately if needed
             }).ToList();
 

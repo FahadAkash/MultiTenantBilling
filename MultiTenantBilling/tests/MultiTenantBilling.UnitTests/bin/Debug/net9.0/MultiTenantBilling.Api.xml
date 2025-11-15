@@ -57,6 +57,14 @@
             <returns>A list of all tenants.</returns>
             <response code="200">Returns the list of tenants.</response>
         </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AdminController.GetSubscriptionsForTenant(System.Guid,MultiTenantBilling.Infrastructure.Repositories.ITenantRepository{MultiTenantBilling.Domain.Entities.Subscription},MultiTenantBilling.Application.Services.ITenantService)">
+            <summary>
+            Gets all subscriptions for a specific tenant.
+            </summary>
+            <param name="tenantId">The ID of the tenant to get subscriptions for.</param>
+            <returns>A list of subscriptions for the tenant.</returns>
+            <response code="200">Returns the list of subscriptions.</response>
+        </member>
         <member name="M:MultiTenantBilling.Api.Controllers.AdminController.CreatePlanForTenant(System.Guid,MultiTenantBilling.Api.Controllers.CreatePlanRequest,MultiTenantBilling.Infrastructure.Repositories.ITenantRepository{MultiTenantBilling.Domain.Entities.Plan},MultiTenantBilling.Application.Services.ITenantService)">
             <summary>
             Creates a new plan for a specific tenant.
@@ -74,6 +82,14 @@
             <returns>The authentication response with a JWT token.</returns>
             <response code="200">Returns the authentication response.</response>
             <response code="400">If the user already exists or validation fails.</response>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AdminController.GenerateManualInvoice(MultiTenantBilling.Api.Controllers.GenerateInvoiceRequest,MultiTenantBilling.Infrastructure.Repositories.ITenantRepository{MultiTenantBilling.Domain.Entities.Invoice},MultiTenantBilling.Infrastructure.Repositories.ITenantRepository{MultiTenantBilling.Domain.Entities.Subscription},MultiTenantBilling.Infrastructure.Repositories.ITenantRepository{MultiTenantBilling.Domain.Entities.Plan},MultiTenantBilling.Application.Services.ITenantService)">
+            <summary>
+            Manually generates an invoice for a specific tenant.
+            </summary>
+            <param name="request">The invoice generation details.</param>
+            <returns>The generated invoice.</returns>
+            <response code="200">Returns the generated invoice.</response>
         </member>
         <member name="T:MultiTenantBilling.Api.Controllers.TenantDto">
             <summary>
@@ -143,6 +159,26 @@
         <member name="P:MultiTenantBilling.Api.Controllers.CreatePlanRequest.IsActive">
             <summary>
             Whether the plan is active.
+            </summary>
+        </member>
+        <member name="T:MultiTenantBilling.Api.Controllers.GenerateInvoiceRequest">
+            <summary>
+            DTO for manually generating an invoice.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.GenerateInvoiceRequest.TenantId">
+            <summary>
+            The ID of the tenant to generate an invoice for.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.GenerateInvoiceRequest.Description">
+            <summary>
+            Optional description for the manual invoice.
+            </summary>
+        </member>
+        <member name="P:MultiTenantBilling.Api.Controllers.GenerateInvoiceRequest.Amount">
+            <summary>
+            The amount for the manual invoice.
             </summary>
         </member>
         <member name="T:MultiTenantBilling.Api.Controllers.AuthController">

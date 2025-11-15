@@ -16,6 +16,7 @@ namespace MultiTenantBilling.Domain.Entities
         public DateTime DueDate { get; set; }
         public bool IsPaid { get; set; }
         public string Status { get; set; } = "Pending"; // Pending, Paid, Overdue
+        public string? Description { get; set; }
         public string? StripeInvoiceId { get; set; }
 
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();

@@ -198,6 +198,46 @@ namespace MultiTenantBilling.Api.Controllers
         }
 
         /// <summary>
+        /// Gets all subscriptions for a specific tenant.
+        /// </summary>
+        /// <param name="tenantId">The ID of the tenant to get subscriptions for.</param>
+        /// <returns>A list of subscriptions for the tenant.</returns>
+        /// <response code="200">Returns the list of subscriptions.</response>
+        [HttpGet("tenants/{tenantId}/subscriptions")]
+        [Authorize(Roles = "Admin")] // Require Admin role
+        [ProducesResponseType(typeof(IEnumerable<SubscriptionDto>), 200)]
+        public async Task<ActionResult<IEnumerable<SubscriptionDto>>> GetSubscriptionsForTenant(Guid tenantId,
+            [FromServices] ITenantRepository<Subscription> subscriptionRepository,
+            [FromServices] ITenantService tenantService)
+        {
+            // Temporarily set the tenant ID for this operation
+            var originalTenantId = tenantService.GetTenantId();
+            tenantService.SetTenantId(tenantId);
+            
+            try
+            {
+                var subscriptions = await subscriptionRepository.GetByTenantIdAsync(tenantId);
+                var subscriptionDtos = subscriptions.Select(subscription => new SubscriptionDto
+                {
+                    Id = subscription.Id,
+                    TenantId = subscription.TenantId,
+                    PlanId = subscription.PlanId,
+                    StartDate = subscription.StartDate,
+                    EndDate = subscription.EndDate,
+                    Status = subscription.Status
+                }).ToList();
+                
+                return Ok(subscriptionDtos);
+            }
+            finally
+            {
+                // Restore the original tenant ID
+                if (originalTenantId.HasValue)
+                    tenantService.SetTenantId(originalTenantId.Value);
+            }
+        }
+
+        /// <summary>
         /// Creates a new plan for a specific tenant.
         /// </summary>
         /// <param name="tenantId">The ID of the tenant to create the plan for.</param>
@@ -279,6 +319,92 @@ namespace MultiTenantBilling.Api.Controllers
                 return BadRequest(new { Error = ex.Message });
             }
         }
+        
+        /// <summary>
+        /// Manually generates an invoice for a specific tenant.
+        /// </summary>
+        /// <param name="request">The invoice generation details.</param>
+        /// <returns>The generated invoice.</returns>
+        /// <response code="200">Returns the generated invoice.</response>
+        [HttpPost("invoices")]
+        [Authorize(Roles = "Admin")] // Require Admin role
+        [ProducesResponseType(typeof(InvoiceDto), 200)]
+        public async Task<ActionResult<InvoiceDto>> GenerateManualInvoice([FromBody] GenerateInvoiceRequest request,
+            [FromServices] ITenantRepository<Invoice> invoiceRepository,
+            [FromServices] ITenantRepository<Subscription> subscriptionRepository,
+            [FromServices] ITenantRepository<Plan> planRepository,
+            [FromServices] ITenantService tenantService)
+        {
+            // Temporarily set the tenant ID for this operation
+            var originalTenantId = tenantService.GetTenantId();
+            tenantService.SetTenantId(request.TenantId);
+            
+            try
+            {
+                // First, check if there's an existing active subscription for this tenant
+                var existingSubscriptions = await subscriptionRepository.GetByTenantIdAsync(request.TenantId);
+                var activeSubscription = existingSubscriptions.FirstOrDefault(s => s.Status == "Active");
+                
+                // If no active subscription exists, create a default one
+                if (activeSubscription == null)
+                {
+                    // Get the first available plan for this tenant
+                    var plans = await planRepository.GetByTenantIdAsync(request.TenantId);
+                    var defaultPlan = plans.FirstOrDefault();
+                    
+                    if (defaultPlan != null)
+                    {
+                        // Create a default subscription
+                        activeSubscription = new Subscription
+                        {
+                            TenantId = request.TenantId,
+                            PlanId = defaultPlan.Id,
+                            StartDate = DateTime.UtcNow,
+                            EndDate = DateTime.UtcNow.AddMonths(1),
+                            Status = "Active"
+                        };
+                        
+                        activeSubscription = await subscriptionRepository.AddAsync(activeSubscription);
+                    }
+                }
+                
+                // Create a manual invoice
+                var invoice = new Invoice
+                {
+                    TenantId = request.TenantId,
+                    SubscriptionId = activeSubscription?.Id ?? Guid.NewGuid(), // Use existing subscription or create a temporary ID
+                    Amount = request.Amount,
+                    InvoiceDate = DateTime.UtcNow,
+                    DueDate = DateTime.UtcNow.AddDays(7), // 7 days to pay
+                    IsPaid = false,
+                    Status = "Pending",
+                    Description = request.Description
+                };
+                
+                var createdInvoice = await invoiceRepository.AddAsync(invoice);
+                
+                var invoiceDto = new InvoiceDto
+                {
+                    Id = createdInvoice.Id,
+                    TenantId = createdInvoice.TenantId,
+                    SubscriptionId = createdInvoice.SubscriptionId,
+                    Amount = createdInvoice.Amount,
+                    InvoiceDate = createdInvoice.InvoiceDate,
+                    DueDate = createdInvoice.DueDate,
+                    IsPaid = createdInvoice.IsPaid,
+                    Status = createdInvoice.Status,
+                    Description = createdInvoice.Description
+                };
+                
+                return Ok(invoiceDto);
+            }
+            finally
+            {
+                // Restore the original tenant ID
+                if (originalTenantId.HasValue)
+                    tenantService.SetTenantId(originalTenantId.Value);
+            }
+        }
     }
 
     /// <summary>
@@ -351,5 +477,26 @@ namespace MultiTenantBilling.Api.Controllers
         /// Whether the plan is active.
         /// </summary>
         public bool IsActive { get; set; } = true;
+    }
+    
+    /// <summary>
+    /// DTO for manually generating an invoice.
+    /// </summary>
+    public class GenerateInvoiceRequest
+    {
+        /// <summary>
+        /// The ID of the tenant to generate an invoice for.
+        /// </summary>
+        public Guid TenantId { get; set; }
+        
+        /// <summary>
+        /// Optional description for the manual invoice.
+        /// </summary>
+        public string Description { get; set; } = string.Empty;
+        
+        /// <summary>
+        /// The amount for the manual invoice.
+        /// </summary>
+        public decimal Amount { get; set; }
     }
 }
