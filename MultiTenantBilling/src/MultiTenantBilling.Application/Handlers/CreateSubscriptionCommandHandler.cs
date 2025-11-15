@@ -6,6 +6,10 @@ using MultiTenantBilling.Application.Services;
 using MultiTenantBilling.Domain.Entities;
 using MultiTenantBilling.Domain.Events;
 using MultiTenantBilling.Infrastructure.Repositories;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MultiTenantBilling.Application.Handlers
 {
@@ -35,6 +39,16 @@ namespace MultiTenantBilling.Application.Handlers
         {
             _logger.LogInformation("Creating subscription for tenant {TenantId} with plan {PlanId}", 
                 request.TenantId, request.PlanId);
+
+            // Check if tenant already has an active subscription
+            var existingSubscriptions = await _subscriptionRepository.GetByTenantIdAsync(request.TenantId);
+            var activeSubscription = existingSubscriptions
+                .FirstOrDefault(s => s.Status == "Active");
+
+            if (activeSubscription != null)
+            {
+                throw new InvalidOperationException("User already has an active subscription. Please cancel the existing subscription before creating a new one.");
+            }
 
             // Get plan details
             var plan = await _planRepository.GetByIdForTenantAsync(request.PlanId, request.TenantId);

@@ -127,6 +127,34 @@ class BillingService {
     }));
   }
 
+  async getInvoicesBySubscription(subscriptionId: string): Promise<Invoice[]> {
+    const response = await api.get<InvoiceDto[]>(`/api/billing/subscriptions/${subscriptionId}/invoices`);
+    return response.data.map(invoice => ({
+      id: invoice.id,
+      tenantId: invoice.tenantId,
+      subscriptionId: invoice.subscriptionId,
+      amount: invoice.amount,
+      invoiceDate: invoice.invoiceDate.toString(),
+      dueDate: invoice.dueDate.toString(),
+      status: invoice.status,
+      isPaid: invoice.isPaid
+    }));
+  }
+
+  async getInvoiceDetails(invoiceId: string): Promise<Invoice> {
+    const response = await api.get<InvoiceDto>(`/api/billing/invoices/${invoiceId}`);
+    return {
+      id: response.data.id,
+      tenantId: response.data.tenantId,
+      subscriptionId: response.data.subscriptionId,
+      amount: response.data.amount,
+      invoiceDate: response.data.invoiceDate.toString(),
+      dueDate: response.data.dueDate.toString(),
+      status: response.data.status,
+      isPaid: response.data.isPaid
+    };
+  }
+
   // Payments
   async processPayment(invoiceId: string, data: ProcessPaymentRequest): Promise<Payment> {
     const response = await api.post<PaymentDto>(`/api/billing/invoices/${invoiceId}/payments`, data);

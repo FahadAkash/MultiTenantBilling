@@ -141,6 +141,25 @@ namespace MultiTenantBilling.Api.Controllers
             var plans = await _mediator.Send(new GetAllPlansQuery { TenantId = tenantId });
             return Ok(plans);
         }
+
+        /// <summary>
+        /// Gets all invoices for a specific subscription.
+        /// </summary>
+        /// <param name="subscriptionId">The ID of the subscription.</param>
+        /// <returns>A list of invoices for the subscription.</returns>
+        /// <response code="200">Returns the list of invoices.</response>
+        [HttpGet("subscriptions/{subscriptionId}/invoices")]
+        [ProducesResponseType(typeof(IEnumerable<InvoiceDto>), 200)]
+        public async Task<ActionResult<IEnumerable<InvoiceDto>>> GetInvoicesBySubscription(Guid subscriptionId)
+        {
+            var tenantId = _tenantService.GetRequiredTenantId();
+            var invoices = await _mediator.Send(new GetInvoicesBySubscriptionQuery 
+            { 
+                SubscriptionId = subscriptionId,
+                TenantId = tenantId
+            });
+            return Ok(invoices);
+        }
     }
 
     /// <summary>

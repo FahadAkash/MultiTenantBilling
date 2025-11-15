@@ -258,6 +258,14 @@
             <returns>A list of all available plans.</returns>
             <response code="200">Returns the list of plans.</response>
         </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.GetInvoicesBySubscription(System.Guid)">
+            <summary>
+            Gets all invoices for a specific subscription.
+            </summary>
+            <param name="subscriptionId">The ID of the subscription.</param>
+            <returns>A list of invoices for the subscription.</returns>
+            <response code="200">Returns the list of invoices.</response>
+        </member>
         <member name="T:MultiTenantBilling.Api.Controllers.CreateSubscriptionRequest">
             <summary>
             DTO for creating a subscription.
