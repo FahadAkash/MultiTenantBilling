@@ -27,6 +27,29 @@
             <returns>A list of all plans.</returns>
             <response code="200">Returns the list of plans.</response>
         </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AdminController.GetAllUsers(MultiTenantBilling.Application.Services.IAuthService)">
+            <summary>
+            Gets all users for the tenant.
+            </summary>
+            <returns>A list of all users.</returns>
+            <response code="200">Returns the list of users.</response>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AdminController.ActivateUser(System.Guid,MultiTenantBilling.Application.Services.IAuthService)">
+            <summary>
+            Activates a user.
+            </summary>
+            <param name="userId">The ID of the user to activate.</param>
+            <returns>True if successful.</returns>
+            <response code="200">Returns true if successful.</response>
+        </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.AdminController.DeactivateUser(System.Guid,MultiTenantBilling.Application.Services.IAuthService)">
+            <summary>
+            Deactivates a user.
+            </summary>
+            <param name="userId">The ID of the user to deactivate.</param>
+            <returns>True if successful.</returns>
+            <response code="200">Returns true if successful.</response>
+        </member>
         <member name="T:MultiTenantBilling.Api.Controllers.CreatePlanRequest">
             <summary>
             DTO for creating a plan.

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MultiTenantBilling.Api.Attributes;
 using MultiTenantBilling.Api.Services;
+using MultiTenantBilling.Application.DTOs;
 using MultiTenantBilling.Application.Services;
 using System.Collections.Generic;
 using System.Security.Claims;

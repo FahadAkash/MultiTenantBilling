@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import SubscriptionManagement from './pages/SubscriptionManagement';
 import InvoiceHistory from './pages/InvoiceHistory';
 import PaymentProcessing from './pages/PaymentProcessing';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/subscriptions" element={<SubscriptionManagement />} />
             <Route path="/invoices" element={<InvoiceHistory />} />
             <Route path="/payments" element={<PaymentProcessing />} />
+            <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         </div>
       </Router>

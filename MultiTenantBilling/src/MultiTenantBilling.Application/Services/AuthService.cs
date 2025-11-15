@@ -263,6 +263,72 @@ namespace MultiTenantBilling.Application.Services
             return true;
         }
 
+        public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
+        {
+            _logger.LogInformation("Getting all users");
+
+            // Get the current tenant ID
+            var tenantId = _tenantService.GetRequiredTenantId();
+
+            // Get all users for this tenant
+            var users = await _userRepository.GetByTenantIdAsync(tenantId);
+
+            // Convert to DTOs
+            var userDtos = users.Select(user => new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                IsActive = user.IsActive,
+                Roles = new string[0] // We'll populate roles separately if needed
+            }).ToList();
+
+            return userDtos;
+        }
+
+        public async Task<bool> ActivateUserAsync(Guid userId)
+        {
+            _logger.LogInformation("Activating user {UserId}", userId);
+
+            // Get the current tenant ID
+            var tenantId = _tenantService.GetRequiredTenantId();
+
+            // Find user by ID
+            var user = await _userRepository.GetByIdForTenantAsync(userId, tenantId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Activate user
+            user.IsActive = true;
+            await _userRepository.UpdateAsync(user);
+
+            return true;
+        }
+
+        public async Task<bool> DeactivateUserAsync(Guid userId)
+        {
+            _logger.LogInformation("Deactivating user {UserId}", userId);
+
+            // Get the current tenant ID
+            var tenantId = _tenantService.GetRequiredTenantId();
+
+            // Find user by ID
+            var user = await _userRepository.GetByIdForTenantAsync(userId, tenantId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Deactivate user
+            user.IsActive = false;
+            await _userRepository.UpdateAsync(user);
+
+            return true;
+        }
+
         #region Helper Methods
 
         private async Task<User> GetUserByEmailAsync(string email)

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MultiTenantBilling.Application.DTOs;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -82,15 +83,5 @@ namespace MultiTenantBilling.Application.Services
         public string Issuer { get; set; } = default!;
         public string Audience { get; set; } = default!;
         public int ExpiryInHours { get; set; } = 1;
-    }
-
-    public class UserDto
-    {
-        public Guid Id { get; set; }
-        public string Email { get; set; } = default!;
-        public string FirstName { get; set; } = default!;
-        public string LastName { get; set; } = default!;
-        public bool IsActive { get; set; }
-        public IEnumerable<string> Roles { get; set; } = new List<string>();
     }
 }

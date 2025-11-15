@@ -4,6 +4,7 @@ import { logout } from '../features/auth/authSlice';
 import type { RootState } from '../store';
 import { useSelector } from 'react-redux';
 import type { AuthState } from '../features/auth/authSlice';
+import authService from '../services/authService';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
@@ -12,6 +13,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   const handleLogout = () => {
     dispatch(logout());
+    authService.clearAuthData();
+    // Redirect to login page
+    window.location.href = '/login';
   };
 
   return (
@@ -65,6 +69,18 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 >
                   Payments
                 </Link>
+                {auth.user?.roles.includes('Admin') && (
+                  <Link
+                    to="/admin"
+                    className={`${
+                      location.pathname === '/admin' 
+                        ? 'border-indigo-500 text-gray-900' 
+                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                    } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                  >
+                    Admin
+                  </Link>
+                )}
               </div>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:items-center">

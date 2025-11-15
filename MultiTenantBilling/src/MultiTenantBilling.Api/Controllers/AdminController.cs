@@ -6,6 +6,7 @@ using MultiTenantBilling.Api.Services;
 using MultiTenantBilling.Application.Commands;
 using MultiTenantBilling.Application.DTOs;
 using MultiTenantBilling.Application.Queries;
+using MultiTenantBilling.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -123,6 +124,50 @@ namespace MultiTenantBilling.Api.Controllers
             var tenantId = _tenantService.GetRequiredTenantId();
             var plans = await _mediator.Send(new GetAllPlansQuery { TenantId = tenantId });
             return Ok(plans);
+        }
+
+        /// <summary>
+        /// Gets all users for the tenant.
+        /// </summary>
+        /// <returns>A list of all users.</returns>
+        /// <response code="200">Returns the list of users.</response>
+        [HttpGet("users")]
+        [Authorize(Roles = "Admin")] // Require Admin role
+        [ProducesResponseType(typeof(IEnumerable<UserDto>), 200)]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers([FromServices] IAuthService authService)
+        {
+            var users = await authService.GetAllUsersAsync();
+            return Ok(users);
+        }
+
+        /// <summary>
+        /// Activates a user.
+        /// </summary>
+        /// <param name="userId">The ID of the user to activate.</param>
+        /// <returns>True if successful.</returns>
+        /// <response code="200">Returns true if successful.</response>
+        [HttpPost("users/{userId}/activate")]
+        [Authorize(Roles = "Admin")] // Require Admin role
+        [ProducesResponseType(typeof(bool), 200)]
+        public async Task<ActionResult<bool>> ActivateUser(Guid userId, [FromServices] IAuthService authService)
+        {
+            var result = await authService.ActivateUserAsync(userId);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Deactivates a user.
+        /// </summary>
+        /// <param name="userId">The ID of the user to deactivate.</param>
+        /// <returns>True if successful.</returns>
+        /// <response code="200">Returns true if successful.</response>
+        [HttpPost("users/{userId}/deactivate")]
+        [Authorize(Roles = "Admin")] // Require Admin role
+        [ProducesResponseType(typeof(bool), 200)]
+        public async Task<ActionResult<bool>> DeactivateUser(Guid userId, [FromServices] IAuthService authService)
+        {
+            var result = await authService.DeactivateUserAsync(userId);
+            return Ok(result);
         }
     }
 
