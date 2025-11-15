@@ -83,20 +83,20 @@ const PaymentProcessing = () => {
 
   return (
     <Layout>
-      <div className="px-4 py-6 sm:px-0">
-        <div className="border-4 border-dashed border-gray-200 rounded-lg h-full p-4">
+      <div className="px-4 py-6 sm:px-0 h-full">
+        <div className="bg-white rounded-lg shadow-md h-full p-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900">Payment Processing</h1>
           </div>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <div className="bg-white shadow sm:rounded-lg">
+            <div className="bg-white shadow sm:rounded-lg border border-gray-200">
               <div className="px-4 py-5 sm:p-6">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">Process Payment</h3>
                 <div className="mt-5">
                   <form onSubmit={handlePaymentSubmit} className="space-y-6">
                     <div>
-                      <label htmlFor="invoice" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="invoice" className="form-label">
                         Select Invoice
                       </label>
                       <select
@@ -104,7 +104,7 @@ const PaymentProcessing = () => {
                         name="invoice"
                         value={selectedInvoice}
                         onChange={(e) => setSelectedInvoice(e.target.value)}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        className="form-input"
                         disabled={isProcessing}
                       >
                         <option value="">Choose an invoice</option>
@@ -119,7 +119,7 @@ const PaymentProcessing = () => {
                     </div>
 
                     <div>
-                      <label htmlFor="payment-method" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="payment-method" className="form-label">
                         Payment Method
                       </label>
                       <select
@@ -127,7 +127,7 @@ const PaymentProcessing = () => {
                         name="payment-method"
                         value={paymentMethod}
                         onChange={(e) => setPaymentMethod(e.target.value)}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        className="form-input"
                         disabled={isProcessing}
                       >
                         <option value="">Choose a payment method</option>
@@ -141,9 +141,9 @@ const PaymentProcessing = () => {
                       <button
                         type="submit"
                         disabled={!selectedInvoice || !paymentMethod || isProcessing}
-                        className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
+                        className={`w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
                           selectedInvoice && paymentMethod && !isProcessing
-                            ? 'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                            ? 'bg-indigo-600 hover:bg-indigo-700'
                             : 'bg-gray-400 cursor-not-allowed'
                         }`}
                       >
@@ -155,14 +155,14 @@ const PaymentProcessing = () => {
               </div>
             </div>
 
-            <div className="bg-white shadow sm:rounded-lg">
+            <div className="bg-white shadow sm:rounded-lg border border-gray-200">
               <div className="px-4 py-5 sm:p-6">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">Payment Information</h3>
                 <div className="mt-5">
                   <div className="border border-gray-200 rounded-md">
                     <div className="bg-gray-50 px-4 py-5 sm:px-6">
                       <h4 className="text-md font-medium text-gray-900">Payment Methods</h4>
-                      <p className="mt-1 text-sm text-gray-500">
+                      <p className="mt-1 text-sm text-gray-600">
                         We accept various payment methods for your convenience.
                       </p>
                     </div>
@@ -178,7 +178,7 @@ const PaymentProcessing = () => {
                           </div>
                           <div className="ml-4">
                             <h5 className="text-base font-medium text-gray-900">Credit Card</h5>
-                            <p className="mt-1 text-sm text-gray-500">
+                            <p className="mt-1 text-sm text-gray-600">
                               Pay with Visa, Mastercard, or American Express.
                             </p>
                           </div>
@@ -193,7 +193,7 @@ const PaymentProcessing = () => {
                           </div>
                           <div className="ml-4">
                             <h5 className="text-base font-medium text-gray-900">Bank Transfer</h5>
-                            <p className="mt-1 text-sm text-gray-500">
+                            <p className="mt-1 text-sm text-gray-600">
                               Direct bank transfer for secure payments.
                             </p>
                           </div>
@@ -208,7 +208,7 @@ const PaymentProcessing = () => {
                           </div>
                           <div className="ml-4">
                             <h5 className="text-base font-medium text-gray-900">PayPal</h5>
-                            <p className="mt-1 text-sm text-gray-500">
+                            <p className="mt-1 text-sm text-gray-600">
                               Quick and secure payments with PayPal.
                             </p>
                           </div>

@@ -457,24 +457,31 @@ namespace MultiTenantBilling.Application.Services
 
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
-            _logger.LogInformation("Getting all users");
+            _logger.LogInformation("Getting all users across all tenants");
 
-            // Get the current tenant ID
-            var tenantId = _tenantService.GetRequiredTenantId();
+            // Get all users across all tenants (admin functionality)
+            var users = await _userRepository.GetAllEntitiesAsync();
 
-            // Get all users for this tenant
-            var users = await _userRepository.GetByTenantIdAsync(tenantId);
+            // Get all user roles to populate roles for each user
+            var allUserRoles = await _userRoleRepository.GetAllEntitiesAsync();
+            var allRoles = await _roleRepository.GetAllEntitiesAsync();
 
-            // Convert to DTOs
-            var userDtos = users.Select(user => new UserDto
-            {
-                Id = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                IsActive = user.IsActive,
-                TenantId = user.TenantId,
-                Roles = new string[0] // We'll populate roles separately if needed
+            // Convert to DTOs and populate roles
+            var userDtos = users.Select(user => {
+                // Get roles for this specific user
+                var userRoles = allUserRoles.Where(ur => ur.UserId == user.Id);
+                var roleNames = userRoles.Join(allRoles, ur => ur.RoleId, r => r.Id, (ur, r) => r.Name).ToArray();
+
+                return new UserDto
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    IsActive = user.IsActive,
+                    TenantId = user.TenantId,
+                    Roles = roleNames
+                };
             }).ToList();
 
             return userDtos;

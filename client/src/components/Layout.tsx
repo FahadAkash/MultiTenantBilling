@@ -19,7 +19,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex flex-col h-screen bg-gray-50">
       {/* Navigation */}
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,7 +34,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   className={`${
                     location.pathname === '/' 
                       ? 'border-indigo-500 text-gray-900' 
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:text-gray-900'
                   } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
                 >
                   Dashboard
@@ -44,7 +44,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   className={`${
                     location.pathname === '/subscriptions' 
                       ? 'border-indigo-500 text-gray-900' 
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:text-gray-900'
                   } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
                 >
                   Subscriptions
@@ -54,7 +54,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   className={`${
                     location.pathname === '/invoices' 
                       ? 'border-indigo-500 text-gray-900' 
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:text-gray-900'
                   } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
                 >
                   Invoices
@@ -64,7 +64,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   className={`${
                     location.pathname === '/payments' 
                       ? 'border-indigo-500 text-gray-900' 
-                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                      : 'border-transparent text-gray-600 hover:border-gray-300 hover:text-gray-900'
                   } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
                 >
                   Payments
@@ -75,7 +75,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                     className={`${
                       location.pathname === '/admin' 
                         ? 'border-indigo-500 text-gray-900' 
-                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                        : 'border-transparent text-gray-600 hover:border-gray-300 hover:text-gray-900'
                     } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
                   >
                     Admin
@@ -118,8 +118,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </nav>
 
       {/* Main content */}
-      <main>
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="flex-1 overflow-auto">
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 h-full">
           {children}
         </div>
       </main>

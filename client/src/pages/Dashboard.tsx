@@ -3,15 +3,15 @@ import Layout from '../components/Layout';
 const Dashboard = () => {
   return (
     <Layout>
-      <div className="px-4 py-6 sm:px-0">
-        <div className="border-4 border-dashed border-gray-200 rounded-lg h-96 p-4">
+      <div className="px-4 py-6 sm:px-0 h-full">
+        <div className="bg-white rounded-lg shadow-md h-full p-6">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Tenant Dashboard</h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 mb-8">
             Welcome to your MultiTenantBilling dashboard. Here you can manage your subscriptions, 
             view invoices, and process payments.
           </p>
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
               <div className="px-4 py-5 sm:p-6">
                 <h3 className="text-lg font-medium text-gray-900">Subscriptions</h3>
                 <p className="mt-1 text-sm text-gray-500">
@@ -27,7 +27,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
               <div className="px-4 py-5 sm:p-6">
                 <h3 className="text-lg font-medium text-gray-900">Invoices</h3>
                 <p className="mt-1 text-sm text-gray-500">
@@ -43,7 +43,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
               <div className="px-4 py-5 sm:p-6">
                 <h3 className="text-lg font-medium text-gray-900">Payments</h3>
                 <p className="mt-1 text-sm text-gray-500">

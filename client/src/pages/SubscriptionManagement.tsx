@@ -101,8 +101,8 @@ const SubscriptionManagement = () => {
 
   return (
     <Layout>
-      <div className="px-4 py-6 sm:px-0">
-        <div className="border-4 border-dashed border-gray-200 rounded-lg h-full p-4">
+      <div className="px-4 py-6 sm:px-0 h-full">
+        <div className="bg-white rounded-lg shadow-md h-full p-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900">Subscription Management</h1>
             <button 
@@ -129,12 +129,12 @@ const SubscriptionManagement = () => {
                 {billing.subscriptions.length > 0 ? (
                   <div className="space-y-6">
                     {billing.subscriptions.map((subscription: Subscription) => (
-                      <div key={subscription.id} className="bg-white overflow-hidden shadow rounded-lg">
+                      <div key={subscription.id} className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
                         <div className="px-4 py-5 sm:p-6">
                           <div className="flex justify-between items-start">
                             <div>
                               <h3 className="text-lg font-medium text-gray-900">{subscription.planName}</h3>
-                              <div className="mt-2 text-sm text-gray-500">
+                              <div className="mt-2 text-sm text-gray-600">
                                 <p>Start Date: {new Date(subscription.startDate).toLocaleDateString()}</p>
                                 <p>End Date: {new Date(subscription.endDate).toLocaleDateString()}</p>
                                 <p>Status: <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -184,13 +184,13 @@ const SubscriptionManagement = () => {
                                           <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                             {invoice.id.substring(0, 8)}
                                           </td>
-                                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600">
                                             {new Date(invoice.invoiceDate).toLocaleDateString()}
                                           </td>
-                                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600">
                                             ${invoice.amount.toFixed(2)}
                                           </td>
-                                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-600">
                                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                                               invoice.isPaid 
                                                 ? 'bg-green-100 text-green-800' 
@@ -225,11 +225,11 @@ const SubscriptionManagement = () => {
                 {billing.plans.length > 0 ? (
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {billing.plans.map((plan: Plan) => (
-                      <div key={plan.id} className="bg-white overflow-hidden shadow rounded-lg">
+                      <div key={plan.id} className="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
                         <div className="px-4 py-5 sm:p-6">
                           <h3 className="text-lg font-medium text-gray-900">{plan.name}</h3>
-                          <p className="mt-1 text-sm text-gray-500">{plan.description}</p>
-                          <div className="mt-2 text-sm text-gray-500">
+                          <p className="mt-1 text-sm text-gray-600">{plan.description}</p>
+                          <div className="mt-2 text-sm text-gray-600">
                             <p>Price: ${plan.monthlyPrice}/month</p>
                             <p>Max Users: {plan.maxUsers}</p>
                             <p>Max Storage: {plan.maxStorageGb} GB</p>
@@ -268,8 +268,8 @@ const SubscriptionManagement = () => {
 
       {/* New Subscription Modal */}
       {showNewSubscriptionModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center">
+          <div className="relative mx-auto p-6 border w-full max-w-md shadow-lg rounded-md bg-white">
             <div className="mt-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-medium text-gray-900">New Subscription</h3>
@@ -284,14 +284,14 @@ const SubscriptionManagement = () => {
               </div>
               <div className="mt-4">
                 <div className="mb-4">
-                  <label htmlFor="plan" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="plan" className="form-label">
                     Select Plan
                   </label>
                   <select
                     id="plan"
                     value={selectedPlan}
                     onChange={(e) => setSelectedPlan(e.target.value)}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    className="form-input"
                   >
                     <option value="">Choose a plan</option>
                     {billing.plans.map((plan: Plan) => (
@@ -304,7 +304,7 @@ const SubscriptionManagement = () => {
                 <div className="flex justify-end space-x-3">
                   <button
                     onClick={handleCloseModal}
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="btn-secondary"
                   >
                     Cancel
                   </button>

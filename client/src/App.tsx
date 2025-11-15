@@ -41,7 +41,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <div className="min-h-screen bg-gray-50">
+        <div className="h-full">
           <Routes>
             <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
