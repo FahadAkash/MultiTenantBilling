@@ -15,7 +15,7 @@ var builder = Host.CreateApplicationBuilder(args);
 
 // Register database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql("Host=localhost;Port=5432;Database=multitenant;Username=postgres;Password=fahadakashMain"));
+    options.UseNpgsql("Host=localhost;Port=5432;Database=multitenant;Username=postgres;Password=YOUR_SECURE_PASSWORD"));
 
 // Register tenant services
 builder.Services.AddScoped<ITenantService, MockTenantService>();
@@ -112,7 +112,7 @@ try
         var registerDto = new RegisterDto
         {
             Email = "admin@example.com",
-            Password = "Admin123!",
+            Password = "YOUR_SECURE_ADMIN_PASSWORD",
             FirstName = "Admin",
             LastName = "User"
         };

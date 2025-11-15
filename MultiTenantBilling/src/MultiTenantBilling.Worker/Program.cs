@@ -12,8 +12,10 @@ var builder = Host.CreateApplicationBuilder(args);
 // Add Redis caching
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = "localhost:6379";
-    options.InstanceName = "MultiTenantBilling_";
+    options.Configuration = builder.Configuration.GetConnectionString("Redis") ?? 
+                           builder.Configuration["Redis:ConnectionString"] ?? 
+                           "localhost:6379";
+    options.InstanceName = builder.Configuration["Redis:InstanceName"] ?? "MultiTenantBilling_";
 });
 
 // Register cache service
