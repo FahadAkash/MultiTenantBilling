@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
-import { useAppDispatch } from '../hooks/useAppDispatch';
+import { useAppDispatch } from '../hooks/useAppSelector';
 import { loginStart, loginSuccess, loginFailure } from '../features/auth/authSlice';
 import authService from '../services/authService';
 
@@ -21,8 +21,22 @@ const Login = () => {
       
       // Store auth data
       authService.setAuthData(response.token, response.user);
-      // Set the default tenant ID
-      authService.setTenantId('11111111-1111-1111-1111-111111111111');
+      
+      // Extract tenant ID from JWT token and set it
+      try {
+        const tokenPayload = JSON.parse(atob(response.token.split('.')[1]));
+        const tenantId = tokenPayload.tenantId;
+        if (tenantId) {
+          authService.setTenantId(tenantId);
+        } else {
+          // Fallback to default tenant ID if not found in token
+          authService.setTenantId('11111111-1111-1111-1111-111111111111');
+        }
+      } catch (error) {
+        console.error('Error extracting tenant ID from token:', error);
+        // Fallback to default tenant ID
+        authService.setTenantId('11111111-1111-1111-1111-111111111111');
+      }
       
       // Dispatch success action
       dispatch(loginSuccess({ user: response.user, token: response.token }));

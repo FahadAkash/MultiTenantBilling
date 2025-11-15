@@ -17,8 +17,21 @@ const initializeApp = () => {
   const existingTenantId = authService.getTenantId();
   
   if (token && !existingTenantId) {
-    // Set the default tenant ID for authenticated users if not already set
-    authService.setTenantId('11111111-1111-1111-1111-111111111111');
+    // Extract tenant ID from JWT token
+    try {
+      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      const tenantId = tokenPayload.tenantId;
+      if (tenantId) {
+        authService.setTenantId(tenantId);
+      } else {
+        // Fallback to default tenant ID if not found in token
+        authService.setTenantId('11111111-1111-1111-1111-111111111111');
+      }
+    } catch (error) {
+      console.error('Error extracting tenant ID from token:', error);
+      // Fallback to default tenant ID
+      authService.setTenantId('11111111-1111-1111-1111-111111111111');
+    }
   }
 };
 

@@ -27,44 +27,75 @@ export interface ProcessPaymentRequest {
 class BillingService {
   // Plans
   async getAllPlans(): Promise<Plan[]> {
-    const response = await api.get<PlanDto[]>('/api/billing/plans');
-    return response.data.map(plan => ({
-      id: plan.id,
-      name: plan.name,
-      description: plan.description,
-      monthlyPrice: plan.monthlyPrice,
-      maxUsers: plan.maxUsers,
-      maxStorageGb: plan.maxStorageGb
-    }));
+    console.log('Fetching all plans from API...');
+    // Log headers being sent
+    const tenantId = localStorage.getItem('tenantId');
+    console.log('Sending request with tenant ID:', tenantId);
+    
+    try {
+      const response = await api.get<PlanDto[]>('/api/billing/plans');
+      console.log('Plans API response:', response.data);
+      
+      return response.data.map(plan => ({
+        id: plan.id,
+        name: plan.name,
+        description: plan.description,
+        monthlyPrice: plan.monthlyPrice,
+        maxUsers: plan.maxUsers,
+        maxStorageGb: plan.maxStorageGb
+      }));
+    } catch (error) {
+      console.error('Error fetching plans:', error);
+      throw error;
+    }
   }
 
   // Subscriptions
   async createSubscription(data: CreateSubscriptionRequest): Promise<Subscription> {
-    const response = await api.post<SubscriptionDto>('/api/billing/subscriptions', data);
-    return {
-      id: response.data.id,
-      tenantId: response.data.tenantId,
-      tenantName: response.data.tenantName,
-      planId: response.data.planId,
-      planName: response.data.planName,
-      startDate: response.data.startDate.toString(),
-      endDate: response.data.endDate.toString(),
-      status: response.data.status
-    };
+    console.log('Creating subscription with data:', data);
+    try {
+      const response = await api.post<SubscriptionDto>('/api/billing/subscriptions', data);
+      console.log('Subscription creation response:', response.data);
+      return {
+        id: response.data.id,
+        tenantId: response.data.tenantId,
+        tenantName: response.data.tenantName,
+        planId: response.data.planId,
+        planName: response.data.planName,
+        startDate: response.data.startDate.toString(),
+        endDate: response.data.endDate.toString(),
+        status: response.data.status
+      };
+    } catch (error) {
+      console.error('Error creating subscription:', error);
+      throw error;
+    }
   }
 
   async getSubscriptions(): Promise<Subscription[]> {
-    const response = await api.get<SubscriptionDto[]>('/api/billing/subscriptions');
-    return response.data.map(sub => ({
-      id: sub.id,
-      tenantId: sub.tenantId,
-      tenantName: sub.tenantName,
-      planId: sub.planId,
-      planName: sub.planName,
-      startDate: sub.startDate.toString(),
-      endDate: sub.endDate.toString(),
-      status: sub.status
-    }));
+    console.log('Fetching subscriptions...');
+    try {
+      const response = await api.get<SubscriptionDto[]>('/api/billing/subscriptions');
+      console.log('Subscriptions API response:', response.data);
+      return response.data.map(sub => ({
+        id: sub.id,
+        tenantId: sub.tenantId,
+        tenantName: sub.tenantName,
+        planId: sub.planId,
+        planName: sub.planName,
+        startDate: sub.startDate.toString(),
+        endDate: sub.endDate.toString(),
+        status: sub.status
+      }));
+    } catch (error: any) {
+      // Handle case where there are no subscriptions yet (404 or empty response)
+      if (error.response?.status === 404 || error.response?.status === 405) {
+        console.log('No subscriptions found for this tenant');
+        return [];
+      }
+      console.error('Error fetching subscriptions:', error);
+      throw error;
+    }
   }
 
   // Invoices

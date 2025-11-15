@@ -15,19 +15,31 @@ const SubscriptionManagement = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
+        console.log('Loading subscription data...');
         dispatch(setLoading(true));
+        
+        // Log tenant ID from localStorage
+        const tenantId = localStorage.getItem('tenantId');
+        console.log('Current tenant ID:', tenantId);
+        
         // Load plans
+        console.log('Loading plans...');
         const plans = await billingService.getAllPlans();
+        console.log('Plans loaded:', plans);
         dispatch(setPlans(plans));
         
         // Load subscriptions
+        console.log('Loading subscriptions...');
         const subscriptions = await billingService.getSubscriptions();
+        console.log('Subscriptions loaded:', subscriptions);
         dispatch(setSubscriptions(subscriptions));
         
         dispatch(setLoading(false));
+        console.log('Data loading completed');
       } catch (error) {
         console.error('Error loading data:', error);
         dispatch(setError('Failed to load subscriptions and plans'));
+        // Even if there's an error loading subscriptions, we should still show the plans
         dispatch(setLoading(false));
       }
     };
@@ -145,6 +157,7 @@ const SubscriptionManagement = () => {
                 ) : (
                   <div className="text-center py-12">
                     <p className="text-gray-500">No plans available.</p>
+                    <p className="text-gray-400 text-sm mt-2">If you're a regular user, please contact your administrator to set up plans.</p>
                   </div>
                 )}
               </div>

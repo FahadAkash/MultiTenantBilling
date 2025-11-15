@@ -184,6 +184,13 @@
             <returns>The processed payment.</returns>
             <response code="200">Returns the processed payment.</response>
         </member>
+        <member name="M:MultiTenantBilling.Api.Controllers.BillingController.GetAllSubscriptions">
+            <summary>
+            Gets all subscriptions for the tenant.
+            </summary>
+            <returns>A list of all subscriptions.</returns>
+            <response code="200">Returns the list of subscriptions.</response>
+        </member>
         <member name="M:MultiTenantBilling.Api.Controllers.BillingController.GetAllPlans">
             <summary>
             Gets all available plans for the tenant.

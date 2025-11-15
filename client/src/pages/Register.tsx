@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
-import { useAppDispatch } from '../hooks/useAppDispatch';
+import { useAppDispatch } from '../hooks/useAppSelector';
 import { registerStart, registerSuccess, registerFailure } from '../features/auth/authSlice';
 import authService from '../services/authService';
 
@@ -25,8 +25,9 @@ const Register = () => {
 
     try {
       const registerData = { email, password, firstName, lastName };
-      await authService.register(registerData);
+      const response = await authService.register(registerData);
       dispatch(registerSuccess());
+      // After registration, redirect to login page
       navigate('/login');
     } catch (error: unknown) {
       if (error instanceof Error) {
