@@ -110,3 +110,6 @@ F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Api\bin\D
 F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Api\bin\Debug\net9.0\tr-TR\Hangfire.Core.resources.dll
 F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Api\bin\Debug\net9.0\zh-TW\Hangfire.Core.resources.dll
 F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Api\bin\Debug\net9.0\zh\Hangfire.Core.resources.dll
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Api\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Api\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\src\MultiTenantBilling.Api\bin\Debug\net9.0\StackExchange.Redis.dll

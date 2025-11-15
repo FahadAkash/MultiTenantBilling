@@ -1,0 +1,8 @@
+{
+  "name": "Basic Plan",
+  "description": "Basic plan with limited features",
+  "monthlyPrice": 29.99,
+  "maxUsers": 5,
+  "maxStorageGb": 100,
+  "isActive": true
+}

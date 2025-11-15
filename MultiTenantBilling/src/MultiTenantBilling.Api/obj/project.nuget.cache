@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "eyIKukRGnds=",
+  "dgSpecHash": "zb2RHCBMRB8=",
   "success": true,
   "projectFilePath": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\MultiTenantBilling.Api.csproj",
   "expectedPackageFiles": [
@@ -29,6 +29,7 @@
     "C:\\Users\\fahad\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\9.0.1\\microsoft.extensions.caching.abstractions.9.0.1.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\microsoft.extensions.caching.memory\\9.0.1\\microsoft.extensions.caching.memory.9.0.1.nupkg.sha512",
+    "C:\\Users\\fahad\\.nuget\\packages\\microsoft.extensions.caching.stackexchangeredis\\9.0.1\\microsoft.extensions.caching.stackexchangeredis.9.0.1.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\9.0.1\\microsoft.extensions.configuration.abstractions.9.0.1.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\9.0.1\\microsoft.extensions.dependencyinjection.9.0.1.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.1\\microsoft.extensions.dependencyinjection.abstractions.9.0.1.nupkg.sha512",
@@ -52,7 +53,9 @@
     "C:\\Users\\fahad\\.nuget\\packages\\newtonsoft.json\\11.0.1\\newtonsoft.json.11.0.1.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\npgsql\\9.0.1\\npgsql.9.0.1.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\9.0.1\\npgsql.entityframeworkcore.postgresql.9.0.1.nupkg.sha512",
+    "C:\\Users\\fahad\\.nuget\\packages\\pipelines.sockets.unofficial\\2.2.8\\pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\scalar.aspnetcore\\1.2.9\\scalar.aspnetcore.1.2.9.nupkg.sha512",
+    "C:\\Users\\fahad\\.nuget\\packages\\stackexchange.redis\\2.7.27\\stackexchange.redis.2.7.27.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\swashbuckle.aspnetcore\\7.0.0\\swashbuckle.aspnetcore.7.0.0.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\7.0.0\\swashbuckle.aspnetcore.swagger.7.0.0.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\7.0.0\\swashbuckle.aspnetcore.swaggergen.7.0.0.nupkg.sha512",
@@ -63,6 +66,7 @@
     "C:\\Users\\fahad\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\system.formats.asn1\\9.0.1\\system.formats.asn1.9.0.1.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.0.1\\system.identitymodel.tokens.jwt.8.0.1.nupkg.sha512",
+    "C:\\Users\\fahad\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\system.memory.data\\1.0.2\\system.memory.data.1.0.2.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",

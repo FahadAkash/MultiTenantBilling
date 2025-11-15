@@ -8,6 +8,16 @@ using MultiTenantBilling.Worker.Services;
 
 var builder = Host.CreateApplicationBuilder(args);
 
+// Add Redis caching
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+    options.InstanceName = "MultiTenantBilling_";
+});
+
+// Register cache service
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
+
 // Register database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -22,22 +32,40 @@ builder.Services.AddScoped<ITenantRepository<Invoice>, InvoiceRepository>();
 builder.Services.AddScoped<ITenantRepository<User>, UserRepository>();
 builder.Services.AddScoped<ITenantRepository<Role>, RoleRepository>();
 builder.Services.AddScoped<ITenantRepository<UserRole>, UserRoleRepository>();
-builder.Services.AddScoped<ITenantRepository<Plan>, PlanRepository>(); // Add PlanRepository
+builder.Services.AddScoped<ITenantRepository<Plan>, PlanRepository>();
 builder.Services.AddScoped<ITenantRepository<UsageRecord>, UsageRecordRepository>();
 builder.Services.AddScoped<ITenantRepository<Payment>, PaymentRepository>();
 builder.Services.AddScoped<ITenantRepository<Tenant>, TenantRepository>();
 
-// Register application services
-builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+// Register base services
+builder.Services.AddScoped<SubscriptionService>();
+builder.Services.AddScoped<PlanService>();
+
+// Register cached services with decorator pattern
+builder.Services.AddScoped<ISubscriptionService>(provider =>
+{
+    var subscriptionService = provider.GetRequiredService<SubscriptionService>();
+    var cacheService = provider.GetRequiredService<ICacheService>();
+    var tenantService = provider.GetRequiredService<ITenantService>();
+    return new CachedSubscriptionService(subscriptionService, cacheService, tenantService);
+});
+
+builder.Services.AddScoped<IPlanService>(provider =>
+{
+    var planService = provider.GetRequiredService<PlanService>();
+    var cacheService = provider.GetRequiredService<ICacheService>();
+    var tenantService = provider.GetRequiredService<ITenantService>();
+    return new CachedPlanService(planService, cacheService, tenantService);
+});
+
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IUsageService, UsageService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 
 // Add MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IAuthService).Assembly));
 
+// Add background services
 builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();

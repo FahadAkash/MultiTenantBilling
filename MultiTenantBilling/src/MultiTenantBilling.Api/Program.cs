@@ -17,6 +17,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers(); // Add this to register controllers
+
+// Add Redis caching
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+    options.InstanceName = "MultiTenantBilling_";
+});
+
+// Register cache service
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -83,8 +94,27 @@ builder.Services.AddScoped<ITenantRepository<UsageRecord>, UsageRecordRepository
 builder.Services.AddScoped<ITenantRepository<Payment>, PaymentRepository>();
 builder.Services.AddScoped<ITenantRepository<Tenant>, TenantRepository>();
 
-// Register application services
-builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+// Register base services
+builder.Services.AddScoped<SubscriptionService>();
+builder.Services.AddScoped<PlanService>();
+
+// Register cached services with decorator pattern
+builder.Services.AddScoped<ISubscriptionService>(provider =>
+{
+    var subscriptionService = provider.GetRequiredService<SubscriptionService>();
+    var cacheService = provider.GetRequiredService<ICacheService>();
+    var tenantService = provider.GetRequiredService<ITenantService>();
+    return new CachedSubscriptionService(subscriptionService, cacheService, tenantService);
+});
+
+builder.Services.AddScoped<IPlanService>(provider =>
+{
+    var planService = provider.GetRequiredService<PlanService>();
+    var cacheService = provider.GetRequiredService<ICacheService>();
+    var tenantService = provider.GetRequiredService<ITenantService>();
+    return new CachedPlanService(planService, cacheService, tenantService);
+});
+
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IUsageService, UsageService>();
