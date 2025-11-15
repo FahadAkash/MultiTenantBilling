@@ -157,19 +157,24 @@ class BillingService {
 
   // Payments
   async processPayment(invoiceId: string, data: ProcessPaymentRequest): Promise<Payment> {
-    const response = await api.post<PaymentDto>(`/api/billing/invoices/${invoiceId}/payments`, data);
-    return {
-      id: response.data.id,
-      invoiceId: response.data.invoiceId,
-      amount: response.data.amount,
-      paymentDate: response.data.paymentDate.toString(),
-      method: response.data.method,
-      status: response.data.status,
-      transactionId: response.data.transactionId,
-      isRetry: response.data.isRetry,
-      retryAttempt: response.data.retryAttempt,
-      failureReason: response.data.failureReason
-    };
+    try {
+      const response = await api.post<PaymentDto>(`/api/billing/invoices/${invoiceId}/payments`, data);
+      return {
+        id: response.data.id,
+        invoiceId: response.data.invoiceId,
+        amount: response.data.amount,
+        paymentDate: response.data.paymentDate.toString(),
+        method: response.data.method,
+        status: response.data.status,
+        transactionId: response.data.transactionId,
+        isRetry: response.data.isRetry,
+        retryAttempt: response.data.retryAttempt,
+        failureReason: response.data.failureReason
+      };
+    } catch (error) {
+      console.error('Error processing payment:', error);
+      throw error;
+    }
   }
 
   async getPayments(): Promise<Payment[]> {

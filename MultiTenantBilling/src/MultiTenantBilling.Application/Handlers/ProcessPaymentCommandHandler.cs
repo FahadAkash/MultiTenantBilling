@@ -2,9 +2,13 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using MultiTenantBilling.Application.Commands;
 using MultiTenantBilling.Application.DTOs;
+using MultiTenantBilling.Application.Services;
 using MultiTenantBilling.Domain.Entities;
 using MultiTenantBilling.Domain.Events;
 using MultiTenantBilling.Infrastructure.Repositories;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MultiTenantBilling.Application.Handlers
 {
@@ -15,17 +19,20 @@ namespace MultiTenantBilling.Application.Handlers
     {
         private readonly ITenantRepository<Invoice> _invoiceRepository;
         private readonly ITenantRepository<Payment> _paymentRepository;
+        private readonly ITenantService _tenantService;
         private readonly IMediator _mediator;
         private readonly ILogger<ProcessPaymentCommandHandler> _logger;
 
         public ProcessPaymentCommandHandler(
             ITenantRepository<Invoice> invoiceRepository,
             ITenantRepository<Payment> paymentRepository,
+            ITenantService tenantService,
             IMediator mediator,
             ILogger<ProcessPaymentCommandHandler> logger)
         {
             _invoiceRepository = invoiceRepository;
             _paymentRepository = paymentRepository;
+            _tenantService = tenantService;
             _mediator = mediator;
             _logger = logger;
         }
@@ -35,7 +42,8 @@ namespace MultiTenantBilling.Application.Handlers
             _logger.LogInformation("Processing payment for invoice {InvoiceId}, Retry: {IsRetry}, Attempt: {RetryAttempt}",
                 request.InvoiceId, request.IsRetry, request.RetryAttempt);
 
-            var invoice = await _invoiceRepository.GetByIdAsync(request.InvoiceId);
+            var tenantId = _tenantService.GetRequiredTenantId();
+            var invoice = await _invoiceRepository.GetByIdForTenantAsync(request.InvoiceId, tenantId);
             if (invoice == null)
             {
                 throw new InvalidOperationException("Invoice not found");
@@ -115,4 +123,3 @@ namespace MultiTenantBilling.Application.Handlers
         }
     }
 }
-

@@ -191,6 +191,35 @@ namespace MultiTenantBilling.Api.Controllers
             
             return Ok(invoiceDtos);
         }
+
+        /// <summary>
+        /// Gets all payments for the tenant.
+        /// </summary>
+        /// <returns>A list of all payments.</returns>
+        /// <response code="200">Returns the list of payments.</response>
+        [HttpGet("payments")]
+        [ProducesResponseType(typeof(IEnumerable<PaymentDto>), 200)]
+        public async Task<ActionResult<IEnumerable<PaymentDto>>> GetAllPayments([FromServices] ITenantRepository<Payment> paymentRepository)
+        {
+            var tenantId = _tenantService.GetRequiredTenantId();
+            var payments = await paymentRepository.GetByTenantIdAsync(tenantId);
+            
+            var paymentDtos = payments.Select(payment => new PaymentDto
+            {
+                Id = payment.Id,
+                InvoiceId = payment.InvoiceId,
+                Amount = payment.Amount,
+                PaymentDate = payment.PaymentDate,
+                Method = payment.Method,
+                Status = payment.Status,
+                TransactionId = payment.TransactionId,
+                IsRetry = payment.IsRetry,
+                RetryAttempt = payment.RetryAttempt,
+                FailureReason = payment.FailureReason
+            }).ToList();
+            
+            return Ok(paymentDtos);
+        }
     }
 
     /// <summary>
