@@ -13,6 +13,7 @@ namespace MultiTenantBilling.Infrastructure.Repositories
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> GetAllForTenantAsync(Guid tenantId);
         Task<IEnumerable<T>> GetByTenantIdAsync(Guid tenantId);
+        Task<IEnumerable<T>> GetAllEntitiesAsync();
         Task<T> AddAsync(T entity);
         Task<T> UpdateAsync(T entity);
         Task<bool> DeleteAsync(Guid id);

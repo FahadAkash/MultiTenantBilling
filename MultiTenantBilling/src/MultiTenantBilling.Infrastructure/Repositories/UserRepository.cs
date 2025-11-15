@@ -20,10 +20,10 @@ namespace MultiTenantBilling.Infrastructure.Repositories
             throw new NotImplementedException("Use GetByIdForTenantAsync with tenant ID");
         }
 
-        public new Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            // This method should not be used directly without tenant context
-            throw new NotImplementedException("Use GetAllForTenantAsync with tenant ID");
+            // This method gets all users across all tenants - used only for login purposes
+            return await _context.Set<User>().ToListAsync();
         }
     }
 }

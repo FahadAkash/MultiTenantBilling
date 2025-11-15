@@ -31,7 +31,7 @@ namespace MultiTenantBilling.Application.BackgroundJobs
                 var startDate = endDate.AddHours(-1); // Aggregate last hour
 
                 // Get all usage records from the last hour
-                var allUsage = await _usageRepository.GetAllAsync();
+                var allUsage = await _usageRepository.GetAllEntitiesAsync();
                 var recentUsage = allUsage
                     .Where(u => u.RecordedAt >= startDate && u.RecordedAt < endDate)
                     .ToList();

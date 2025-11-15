@@ -50,6 +50,11 @@ namespace MultiTenantBilling.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<T>> GetAllEntitiesAsync()
+        {
+            return await _context.Set<T>().ToListAsync();
+        }
+
         public async Task<T> AddAsync(T entity)
         {
             _context.Set<T>().Add(entity);

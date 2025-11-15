@@ -12,6 +12,7 @@ namespace MultiTenantBilling.Application.Services
         private readonly ITenantRepository<User> _userRepository;
         private readonly ITenantRepository<Role> _roleRepository;
         private readonly ITenantRepository<UserRole> _userRoleRepository;
+        private readonly ITenantRepository<Tenant> _tenantRepository;
         private readonly ITenantService _tenantService; // Use ITenantService from Application layer
         private readonly JwtService _jwtService;
         private readonly ILogger<AuthService> _logger;
@@ -20,6 +21,7 @@ namespace MultiTenantBilling.Application.Services
             ITenantRepository<User> userRepository,
             ITenantRepository<Role> roleRepository,
             ITenantRepository<UserRole> userRoleRepository,
+            ITenantRepository<Tenant> tenantRepository,
             ITenantService tenantService, // Use ITenantService from Application layer
             JwtService jwtService,
             ILogger<AuthService> logger)
@@ -27,6 +29,7 @@ namespace MultiTenantBilling.Application.Services
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _userRoleRepository = userRoleRepository;
+            _tenantRepository = tenantRepository;
             _tenantService = tenantService;
             _jwtService = jwtService;
             _logger = logger;
@@ -36,7 +39,11 @@ namespace MultiTenantBilling.Application.Services
         {
             _logger.LogInformation("Registering new user: {Email}", registerDto.Email);
 
-            var tenantId = _tenantService.GetRequiredTenantId();
+            // For registration, we need to create a new tenant for the user
+            var tenantId = await CreateTenantForUserAsync(registerDto);
+
+            // Set the tenant ID in the tenant service for the current request context
+            _tenantService.SetTenantId(tenantId);
 
             // Check if user already exists
             var existingUser = await GetUserByEmailAsync(registerDto.Email);
@@ -93,10 +100,12 @@ namespace MultiTenantBilling.Application.Services
         {
             _logger.LogInformation("User login attempt: {Email}", loginDto.Email);
 
-            var tenantId = _tenantService.GetRequiredTenantId();
-
-            // Find user by email
-            var user = await GetUserByEmailAsync(loginDto.Email);
+            // For login, we need to find the user first and then get their tenant ID
+            // We can't use _tenantService.GetRequiredTenantId() here because the tenant ID
+            // is part of what we're trying to authenticate
+            
+            // Find user by email (we'll need to search across all tenants for this specific case)
+            var user = await FindUserByEmailAcrossTenantsAsync(loginDto.Email);
             if (user == null)
             {
                 throw new InvalidOperationException("Invalid email or password");
@@ -108,12 +117,15 @@ namespace MultiTenantBilling.Application.Services
                 throw new InvalidOperationException("Invalid email or password");
             }
 
+            // Get the tenant ID from the user record
+            var tenantId = user.TenantId;
+
             // Update last login timestamp
             user.LastLoginAt = DateTime.UtcNow;
             await _userRepository.UpdateAsync(user);
 
             // Get user roles
-            var roles = await GetUserRolesAsync(user.Id);
+            var roles = await GetUserRolesAsyncForTenant(user.Id, tenantId);
 
             var userDto = new UserDto
             {
@@ -198,6 +210,29 @@ namespace MultiTenantBilling.Application.Services
             return true;
         }
 
+        private async Task<Guid> CreateTenantForUserAsync(RegisterDto registerDto)
+        {
+            // Generate a tenant name based on the user's name
+            var tenantName = $"{registerDto.FirstName} {registerDto.LastName}'s Organization";
+            
+            // Generate a subdomain based on the user's email
+            var emailParts = registerDto.Email.Split('@');
+            var subdomain = emailParts[0].ToLower().Replace(".", "-");
+            
+            // Create a new tenant
+            var tenant = new Tenant
+            {
+                TenantId = Guid.NewGuid(),
+                Name = tenantName,
+                Subdomain = subdomain,
+                Email = registerDto.Email,
+                Status = "Active"
+            };
+            
+            var createdTenant = await _tenantRepository.AddAsync(tenant);
+            return createdTenant.Id;
+        }
+
         public async Task<bool> RemoveRoleAsync(string userEmail, string roleName)
         {
             _logger.LogInformation("Removing role {RoleName} from user {UserEmail}", roleName, userEmail);
@@ -241,6 +276,14 @@ namespace MultiTenantBilling.Application.Services
             return users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
 
+        private async Task<User> FindUserByEmailAcrossTenantsAsync(string email)
+        {
+            // For login purposes, we need to search across all tenants
+            // This is a special case where we don't have tenant context yet
+            var allUsers = await _userRepository.GetAllEntitiesAsync();
+            return allUsers.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+        }
+
         private async Task<Role> GetRoleByNameAsync(string roleName)
         {
             // Get the current tenant ID
@@ -266,6 +309,21 @@ namespace MultiTenantBilling.Application.Services
             // Get the current tenant ID
             var tenantId = _tenantService.GetRequiredTenantId();
             
+            // Query the database for the user roles with the specified user ID and tenant ID
+            var userRoles = await _userRoleRepository.GetByTenantIdAsync(tenantId);
+            var userSpecificRoles = userRoles.Where(ur => ur.UserId == userId);
+            
+            // Get the role names for these user-role associations
+            var roles = await _roleRepository.GetByTenantIdAsync(tenantId);
+            var roleNames = userSpecificRoles
+                .Join(roles, ur => ur.RoleId, r => r.Id, (ur, r) => r.Name)
+                .ToArray();
+                
+            return roleNames;
+        }
+
+        private async Task<string[]> GetUserRolesAsyncForTenant(Guid userId, Guid tenantId)
+        {
             // Query the database for the user roles with the specified user ID and tenant ID
             var userRoles = await _userRoleRepository.GetByTenantIdAsync(tenantId);
             var userSpecificRoles = userRoles.Where(ur => ur.UserId == userId);
