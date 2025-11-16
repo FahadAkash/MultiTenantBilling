@@ -24,7 +24,11 @@ namespace MultiTenantBilling.Infrastructure.Repositories
             throw new NotImplementedException("Use GetByIdForTenantAsync instead or implement tenant filtering in concrete class");
         }
 
-        public async Task<T> GetByIdForTenantAsync(Guid id, Guid tenantId)
+        public async Task<T?> GetByIdForTenantAsync(Guid id, Guid tenantId)
+        {
+            return await _context.Set<T>()
+                .FirstOrDefaultAsync(e => e.Id == id && e.TenantId == tenantId);
+        }
         {
             return await _context.Set<T>()
                 .FirstOrDefaultAsync(e => e.Id == id && e.TenantId == tenantId);

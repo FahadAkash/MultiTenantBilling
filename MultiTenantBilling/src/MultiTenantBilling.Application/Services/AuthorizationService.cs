@@ -153,7 +153,15 @@ namespace MultiTenantBilling.Application.Services
 
         #region Helper Methods
 
-        private async Task<User> GetUserByEmailAsync(string email)
+        private async Task<User?> GetUserByEmailAsync(string email)
+        {
+            // Get the current tenant ID
+            var tenantId = _tenantService.GetRequiredTenantId();
+            
+            // Query the database for the user with the specified email and tenant ID
+            var users = await _userRepository.GetByTenantIdAsync(tenantId);
+            return users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+        }
         {
             // Get the current tenant ID
             var tenantId = _tenantService.GetRequiredTenantId();
