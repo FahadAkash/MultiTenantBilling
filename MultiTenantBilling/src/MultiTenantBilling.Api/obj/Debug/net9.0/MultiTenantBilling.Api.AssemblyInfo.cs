@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MultiTenantBilling.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ea4e10e790050b0da2bb7fb5bbdf91544f4470f9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+91e1678d81e06e880bd9e21ada49378a7442d37d")]
 [assembly: System.Reflection.AssemblyProductAttribute("MultiTenantBilling.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MultiTenantBilling.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

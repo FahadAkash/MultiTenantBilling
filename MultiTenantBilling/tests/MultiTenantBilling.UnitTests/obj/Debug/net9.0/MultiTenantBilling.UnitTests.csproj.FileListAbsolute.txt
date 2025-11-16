@@ -190,3 +190,5 @@ F:\gihtub\MultiTenantBilling\MultiTenantBilling\tests\MultiTenantBilling.UnitTes
 F:\gihtub\MultiTenantBilling\MultiTenantBilling\tests\MultiTenantBilling.UnitTests\bin\Debug\net9.0\MultiTenantBilling.Api.dll
 F:\gihtub\MultiTenantBilling\MultiTenantBilling\tests\MultiTenantBilling.UnitTests\bin\Debug\net9.0\MultiTenantBilling.Api.pdb
 F:\gihtub\MultiTenantBilling\MultiTenantBilling\tests\MultiTenantBilling.UnitTests\bin\Debug\net9.0\MultiTenantBilling.Api.xml
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\tests\MultiTenantBilling.UnitTests\bin\Debug\net9.0\Microsoft.Extensions.DependencyModel.dll
+F:\gihtub\MultiTenantBilling\MultiTenantBilling\tests\MultiTenantBilling.UnitTests\bin\Debug\net9.0\Scrutor.dll

@@ -29,8 +29,8 @@ namespace MultiTenantBilling.Application.Handlers
         {
             _logger.LogInformation("Getting upcoming billing for date {BillingDate}", request.BillingDate);
 
-            // Get all active subscriptions
-            var allSubscriptions = await _subscriptionRepository.GetAllAsync();
+            // Get all active subscriptions across all tenants
+            var allSubscriptions = await _subscriptionRepository.GetAllEntitiesAsync();
             var activeSubscriptions = allSubscriptions
                 .Where(s => s.Status == "Active" && s.EndDate.Date <= request.BillingDate.Date)
                 .ToList();

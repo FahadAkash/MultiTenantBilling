@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "eLPWUp9MDpQ=",
+  "dgSpecHash": "xpe6wjUPLoE=",
   "success": true,
   "projectFilePath": "F:\\gihtub\\MultiTenantBilling\\MultiTenantBilling\\src\\MultiTenantBilling.Api\\MultiTenantBilling.Api.csproj",
   "expectedPackageFiles": [
@@ -67,6 +67,7 @@
     "C:\\Users\\fahad\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\9.0.1\\npgsql.entityframeworkcore.postgresql.9.0.1.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\pipelines.sockets.unofficial\\2.2.8\\pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\scalar.aspnetcore\\1.2.9\\scalar.aspnetcore.1.2.9.nupkg.sha512",
+    "C:\\Users\\fahad\\.nuget\\packages\\scrutor\\6.1.0\\scrutor.6.1.0.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\stackexchange.redis\\2.7.27\\stackexchange.redis.2.7.27.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\swashbuckle.aspnetcore\\7.0.0\\swashbuckle.aspnetcore.7.0.0.nupkg.sha512",
     "C:\\Users\\fahad\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\7.0.0\\swashbuckle.aspnetcore.swagger.7.0.0.nupkg.sha512",
