@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./MultiTenantBilling
+      dockerfile: src/MultiTenantBilling.Api/Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Container
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=multitenant;Username=postgres;Password=postgres
+      - Redis__ConnectionString=redis:6379
+      - JwtSettings__Secret=YOUR_VERY_SECURE_JWT_SECRET_KEY_THAT_SHOULD_BE_CHANGED_IN_PRODUCTION
+      - JwtSettings__Issuer=MultiTenantBilling
+      - JwtSettings__Audience=MultiTenantBillingUsers
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - multitenant-network
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - multitenant-network
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: multitenant
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - multitenant-network
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - multitenant-network
+
+volumes:
+  postgres_data:
+
+networks:
+  multitenant-network:
+    driver: bridge

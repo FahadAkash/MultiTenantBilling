@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5168:80"  # Match the port from vite.config.ts
+    volumes:
+      - ./MultiTenantBilling/src:/app/src
+    build:
+      target: build  # Use the build stage for development
+
+  frontend:
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "3000:80"
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
