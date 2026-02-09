@@ -1,6 +1,8 @@
 {
     "version": "1.0.3",
+    "luncher_version" : "1.0",
     "downloadUrl": "https://course.fahadakash.com/game/windows.zip",
     "changelog": "New Features:\n- Added new levels\n- Improved performance\n- Bug fixes \n Character mismatch fixed",
-    "fileSize": 288289587
+    "fileSize": 288289587 ,
+    
 }
