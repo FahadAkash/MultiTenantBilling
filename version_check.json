@@ -2,6 +2,7 @@
     "version": "1.0.4",
     "luncher_version" : "1.0",
     "downloadUrl": "https://course.fahadakash.com/another/windows.zip",
+    "luncher_download_url": "https://course.fahadakash.com/another/Corruptions%20End%20Launcher.exe",
     "changelog": "Update 1.0.4:\n- Multiplayer: Fixed critical LAN crash (StackOverflow bug).\n- Graphics: New professional hit system with localized Pinch effects.\n- Visuals: Integrated dynamic Post-Processing (Bloom/Saturation pulses).\n- UI: Fixed broken Main Menu buttons and improved intro sequences.\n- Updater: Added seamless Batch-restart for game updates.",
     "fileSize": 288300000 
 }
