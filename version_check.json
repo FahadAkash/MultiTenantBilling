@@ -1,9 +1,9 @@
 {
-    "version": "1.0.4",
+    "version": "2.0.0",
     "luncher_version": "1.1",
     "downloadUrl": "https://course.fahadakash.com/another/windows.zip",
     "luncher_download_url": "https://course.fahadakash.com/another/Corruptions%20End%20Launcher.exe",
-    "changelog": "Update 1.0.4: Features...",
+    "changelog": "Major Update 2.0.0:\n- New Character: A brand new fighter joins the roster!\n- Graphics Overhaul: Added professional Hit Effects & Post-Processing Bloom.\n- Performance: Significant optimization for smoother gameplay.\n- UI Upgrade: Enhanced Character Selection Screen with high-quality TextMeshPro support.\n- Multiplayer: Fixed critical connection stability issues.",
     "fileSize": 288300000,
     "underMaintenance": false,
     "maintenanceMessage": "Server is under maintenance. Please try again later."
