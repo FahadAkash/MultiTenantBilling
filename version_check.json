@@ -1,9 +1,9 @@
 {
-    "version": "2.0.1",
+    "version": "2.1.1",
     "luncher_version": "1.1",
-    "downloadUrl": "https://course.fahadakash.com/another/maingame.zip",
+    "downloadUrl": "https://course.fahadakash.com/another/maingame_multiplayer.zip",
     "luncher_download_url": "https://course.fahadakash.com/another/Corruptions%20End%20Launcher.exe",
-    "changelog": "What's New in 2.0.1:\n- Relighting system added for improved visuals.\n- New Map: Night Dhaka City.\n- New Map: Modern City.\n- Graphics improvements across environments.\n- Added toggle button to enable/disable effects.",
+    "changelog": "What's New in 2.1.1:\n- Multiplayer added.",
     "fileSize": 288300000,
     "underMaintenance": false,
     "maintenanceMessage": "Server is under maintenance. Please try again later."
