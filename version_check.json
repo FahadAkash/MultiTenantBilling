@@ -1,10 +1,10 @@
 {
     "version": "2.1.2",
-    "luncher_version": "1.1",
-    "downloadUrl": "https://course.fahadakash.com/another/maingame_multiplayer.zip",
-    "luncher_download_url": "https://course.fahadakash.com/another/Corruptions%20End%20Launcher.exe",
-    "changelog": "What's New in 2.1.1:\n- Multiplayer added.\n- Several bugs fixed.\n- Last map reworked and improved.",
-    "fileSize": 288300000,
+    "luncher_version": "1.2",
+    "downloadUrl": "https://85af707cdbc8a7b243573961f1e042d6.r2.cloudflarestorage.com/games/version%20v1.1%2Fmaingame_multiplaye.zip",
+    "luncher_download_url": "https://85af707cdbc8a7b243573961f1e042d6.r2.cloudflarestorage.com/games/Corruptions%20End%20Launcher.exe",
+    "changelog": "- lunacher right now working perfect ",
+    "fileSize": 0,
     "underMaintenance": false,
     "maintenanceMessage": "Server is under maintenance. Please try again later."
 }
