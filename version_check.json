@@ -1,10 +1,10 @@
 {
     "version": "2.1.2",
     "luncher_version": "1.2",
-    "downloadUrl": "https://85af707cdbc8a7b243573961f1e042d6.r2.cloudflarestorage.com/games/version%20v1.1%2Fmaingame_multiplaye.zip",
+    "downloadUrl": "https://85af707cdbc8a7b243573961f1e042d6.r2.cloudflarestorage.com/games/version%20v1.1/maingame_multiplaye.zip",
     "luncher_download_url": "https://85af707cdbc8a7b243573961f1e042d6.r2.cloudflarestorage.com/games/Corruptions%20End%20Launcher.exe",
-    "changelog": "- lunacher right now working perfect ",
+    "changelog": "",
     "fileSize": 0,
-    "underMaintenance": true,
+    "underMaintenance": false,
     "maintenanceMessage": "Server is under maintenance. Please try again later."
 }
